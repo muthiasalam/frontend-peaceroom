@@ -1,0 +1,50 @@
+.form-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+ .field {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap:15px;
+ }
+
+ .password-input-container{
+  width: 100%;
+  display: flex;
+  flex-direction:row ;
+ }
+
+ .password-input{
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+  width: 80%;
+ }
+
+ .container-password-toggle-icon{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color:#F6F6F6 ;
+  border-radius:  0px 8px 8px 0px ;
+  width: 20%;
+  
+ }
+ .password-toggle-icon{
+  height: 40%;
+  
+ }
+ .error-message{
+  color: red;
+  font-size: 14px;
+ }
+
+ .login-field-error{
+  display: flex;
+  align-items: center;
+ gap: 10px
+ }
+
+ 

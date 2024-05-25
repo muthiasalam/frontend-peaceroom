@@ -1,0 +1,45 @@
+.detail-title-close{
+    display: flex; 
+    justify-content: space-between;
+    align-items: center;
+    
+ }
+
+ .detail-peminjaman-container{
+    display: flex;
+    flex-direction: column;
+    gap: 35px;
+ }
+
+ .detail-table {
+   border-spacing: 0 8px; /* Memberikan jarak vertikal 10px antar baris */
+ }
+.peminjaman-detail-edit{
+   width: 100%;
+   padding: 8px 16px;
+   background-color: #1E5AA0;
+   color: white;
+   border-radius: 4px;
+   border: none;
+}
+
+.peminjaman-detail-edit-text{
+   font-size: 14px;
+
+}
+
+.peminjaman-detail-edit-icon{
+   height: 14px;
+}
+
+.detail-table td:first-child {
+   width: 30%; /* Mengatur lebar kolom pertama menjadi 30% */
+ }
+ 
+ .detail-table td:nth-child(2) {
+   width: 10px; /* Mengatur lebar kolom kedua menjadi 10px */
+ }
+ 
+ .detail-table td:nth-child(3) {
+   width: 60px; /* Mengatur lebar kolom ketiga menjadi 60px */
+ }

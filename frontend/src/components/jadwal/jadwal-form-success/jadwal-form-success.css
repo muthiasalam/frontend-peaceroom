@@ -1,0 +1,70 @@
+
+  .form-success-container {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+    justify-content: center;
+    background-color: white;
+    align-items: center;
+  }
+  .text1-wrapper {
+    font-size: 18px;
+    text-align: center;
+    font-weight: 600;
+    margin-bottom: 5px;
+  }
+  .text2-wrapper {
+    font-size: 14px;
+    text-align: center;
+  }
+  
+  .form-success-button {
+    border: none;
+    background-color: #1e5aa0;
+    padding: 10px 20px;
+    border-radius: 4px;
+    font-size: 14x;
+    color: white;
+    cursor: pointer;
+   
+  }
+
+  .form-success-text{
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  
+
+  .text3-wrapper {
+    display: flex;
+    align-items: center;
+    border: #e6e6e6 solid 1px;
+    padding: 8px 16px;
+    border-radius: 8px;
+    margin: 10px 0;
+    font-size: 14px;
+    color: #333;
+  }
+  
+  .copy-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    padding: 5px;
+  }
+  
+  .copy-button svg {
+    color: #333;
+  }
+
+  .copy-button svg:hover {
+    background-color: transparent;
+  }
+
+  .bookingTitle{
+    font-size: 14px;
+  }

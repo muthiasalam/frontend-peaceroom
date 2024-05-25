@@ -1,0 +1,37 @@
+.detail-event-table {
+    border-spacing: 0 8px; /* Memberikan jarak vertikal 10px antar baris */
+  }
+
+  .detail-event-button{
+    width: 100%;
+    padding: 8px 16px;
+    background-color: #1E5AA0;
+    color: white;
+    border-radius: 4px;
+    border: none;
+ }
+ 
+ 
+ .jadwal-detail-top{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+ }
+ 
+ .detail-event-table td:first-child {
+    width: 20%; /* Mengatur lebar kolom pertama menjadi 30% */
+  }
+  
+  .detail-event-table td:nth-child(2) {
+    width: 5%; /* Mengatur lebar kolom kedua menjadi 10px */
+  }
+  
+  .detail-event-table td:nth-child(3) {
+    width: 75%; /* Mengatur lebar kolom ketiga menjadi 60px */
+  }
+
+  .jadwal-detail-bottom{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }

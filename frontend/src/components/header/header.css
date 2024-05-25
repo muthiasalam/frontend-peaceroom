@@ -1,0 +1,143 @@
+
+
+.header-component {
+  width: 100%;
+  height: Hug (75px) px;
+  padding: 15px 0 15px 0;
+  justify-content: space-between;
+  opacity: 0px;
+  display: flex;
+  flex-direction: row;
+}
+
+.lambang {
+    display: flex;
+  flex-direction: row;
+  justify-content: start;
+  align-items: center;
+  gap: 16px;
+  margin-left: 30px
+}
+
+.lambang img {
+    width: 200px;
+  height: auto;
+  gap: 0px;
+  opacity: 0px;
+}
+
+.nav-menu ul {
+  list-style-type: none; /* Menghapus poin daftar */
+  padding: 0;
+  margin: 0;
+  display: flex; /* Mengatur tata letak menjadi flexbox */
+  gap: 35px;
+  opacity: 0px;
+  align-items: center;
+}
+
+.nav-menu {
+  display: flex; /* Mengatur tata letak menjadi flexbox */
+  justify-content: center; /* Posisi vertikal ke tengah */
+  margin-right: 30px
+}
+
+.nav-beranda,
+.nav-kalender {
+  font-family: Roboto;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 19.2px;
+  text-align: center;
+  border: none; /* Menghapus border */
+  padding: 0; /* Menghapus padding */
+  background-color: transparent; /* Menghapus warna latar belakang */
+  cursor: pointer;
+  color: #000000;
+}
+
+.nav-status button {
+  font-family: Roboto;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 19.2px;
+  text-align: center;
+  border: none; /* Menghapus border */
+  padding: 0; /* Menghapus padding */
+  background-color: transparent; /* Menghapus warna latar belakang */
+  cursor: pointer;
+  color: #000000;
+}
+
+.nav-admin button {
+  width: 100px;
+  height: 35px;
+  border: none;
+  border-radius: 8px;
+  opacity: 0px;
+  background-color: #1e5aa0;
+  display: flex; /* Mengatur tata letak menjadi flexbox */
+  justify-content: center; /* Memusatkan secara horizontal */
+  align-items: center; /* Memusatkan secara vertikal */
+}
+
+.nav-admin button:focus {
+  outline: none;
+}
+
+.nav-admin p {
+  font-family: Roboto;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 19.2px;
+  text-align: center;
+  color: #ffffff;
+  margin: 0; /* Menghapus margin bawaan */
+  cursor: pointer;
+}
+
+.nav-menu button:hover p {
+  font-weight: bold;
+}
+
+button p {
+  white-space: nowrap;
+}
+
+
+.logo-teks {
+  display: flex; /* Menggunakan flexbox */
+  align-items: center; /* Mengatur item ke tengah secara vertikal */
+  gap: 10px;
+}
+
+.logo-teks img {
+  margin-right: 10px; /* Memberikan jarak antara gambar dan teks */
+}
+
+.teks-logo {
+  display: flex; /* Menggunakan flexbox */
+  flex-direction: column; /* Menjadikan elemen teks-logo menjadi kolom */
+}
+
+.siparua {
+  margin: 0;
+  font-family: "Montserrat", sans-serif;
+  font-optical-sizing: auto;
+font-size: 27.74px;
+font-weight: 400;
+line-height: 33.29px;
+letter-spacing: 0.09em;
+text-align: center;
+
+}
+
+.sistem-peminjaman {
+  margin: 0;
+  font-family: "Montserrat", sans-serif;
+font-size: 9px;
+font-weight: 500;
+line-height: 9.36px;
+text-align: left;
+white-space: nowrap;
+}

@@ -1,0 +1,32 @@
+
+  .popup-delete-container {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    justify-content: center;
+    background-color: white;
+    align-items: center;
+  }
+  
+  .delete-button-wrapper {
+    display: flex;
+    gap: 10px;
+  }
+  .popup-delete-button1 {
+    padding: 8px 16px;
+    background-color: #f6f6f6;
+    border: none;
+    border-radius: 4px;
+  }
+  
+  .popup-delete-button2 {
+    padding: 8px 16px;
+    background-color: #a01e1e;
+    border: none;
+    border-radius: 4px;
+    color: white;
+  }
+  
+  .delete-text-wrapper{
+    font-size: 16px;
+  }

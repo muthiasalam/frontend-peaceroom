@@ -1,0 +1,157 @@
+.sidebar {
+  width: 60px; /* Atur lebar default */
+  background-color: white;
+  box-shadow: 0 1px 3px 0 rgba(0,0,0,0.1), 0 1px 2px -1px rgba(0,0,0,0.1);
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 30px 10px;
+  gap: 30px;
+  position: fixed;
+  z-index: 3;
+ 
+
+}
+
+.menus {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+}
+
+.menus-visible {
+  width: 100%;
+}
+
+.sidebar-open {
+  width: 200px; /* Lebar saat sidebar terbuka */
+  align-items: start;
+  padding: 30px;
+}
+
+.logo {
+  display: none; /* Logo akan disembunyikan secara default */
+  color: black;
+}
+
+.logo-visible {
+  display: block; /* Logo akan ditampilkan saat isOpen bernilai true */
+  width: 100%;
+  height: auto;
+  margin-bottom: 40px;
+}
+
+.text {
+  display: none; /* Logo akan disembunyikan secara default */
+  color: black;
+}
+
+.text-visible {
+  display: block; /* Logo akan ditampilkan saat isOpen bernilai true */
+  font-weight: 600;
+  padding-bottom: 15px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.mid-visible {
+  width: 100%;
+  height: auto;
+}
+
+.link-text {
+  display: none; /* Element akan disembunyikan secara default */
+}
+
+.link-text-visible {
+  display: block; /* Element akan ditampilkan saat isOpen bernilai true */
+}
+
+.icon {
+  width: 20px;
+}
+
+.link.active {
+  color: #1E5AA0;
+}
+
+.icon.active {
+  color: #1E5AA0; /* Ubah warna ikon menjadi biru ketika menu aktif */
+}
+
+.top {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.top-visible {
+  justify-content: end;
+}
+
+.link {
+  display: flex;
+  color: #000000;
+  align-items: center;
+  gap: 30px;
+}
+
+.bars {
+  padding: 10px 15px;
+  background-color: #f0f0f0;
+  border-radius: 8px;
+}
+
+.bottom34 {
+  margin-top: auto;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  width: 100%;
+}
+
+.signup-button:hover{
+  margin-bottom: 60px;
+  padding: 7px 20px;
+  background-color: #CD5E5E;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  width: 100%;
+  display: none;
+}
+.signup-button {
+  margin-bottom: 60px;
+  padding: 7px 20px;
+  background-color: #CD5E5E;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  width: 100%;
+  display: none; /* tombol signup awalnya tersembunyi */
+}
+
+.signup-button:hover {
+  background-color: #0056b3;
+}
+
+.signup-button-visible{
+  display: block;
+}
+
+.signout-container{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  
+}
+
+.sidebar-bottom-span{
+  color: white;
+}
+
+.link{
+  text-decoration: none;
+}

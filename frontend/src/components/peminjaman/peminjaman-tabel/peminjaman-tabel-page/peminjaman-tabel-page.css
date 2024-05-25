@@ -1,0 +1,35 @@
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 20px;
+}
+
+.button {
+  margin: 0 4px; /* Menambahkan jarak antara tombol */
+  padding: 8px 12px; /* Menyesuaikan padding tombol */
+  border-radius: 5px; /* Memberikan border radius */
+  background-color: #f0f0f0; /* Warna latar belakang tombol */
+  border: none;
+  color: #333; /* Warna teks tombol */
+  cursor: pointer;
+}
+
+.button:hover {
+  background-color: #e0e0e0; /* Warna latar belakang tombol saat hover */
+}
+
+.activeButton {
+  background-color: #1E5AA0; /* Warna latar belakang tombol aktif */
+  color: #fff; /* Warna teks tombol aktif */
+}
+
+.disabled {
+  pointer-events: none; /* Menonaktifkan interaksi pada tombol nonaktif */
+  opacity: 0.5; /* Mengurangi opacity pada tombol nonaktif */
+}
+
+.ellipsis {
+  margin: 0 4px; /* Menambahkan jarak antara elipsis */
+  color: #333; /* Warna teks elipsis */
+}

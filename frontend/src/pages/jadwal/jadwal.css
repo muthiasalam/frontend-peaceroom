@@ -1,0 +1,70 @@
+.jadwal-main {
+    padding: 50px;
+  }
+  
+  .jadwal-top {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin: 10px 0px;
+  }
+  
+  .jadwal-top-right {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  .jadwal-top-ruangan-button {
+    padding: 10px 15px;
+    border: 1px solid #1e5aa0;
+    border-radius: 4px; /* Default border radius */
+    background-color: white;
+    color: #1e5aa0;
+  }
+  
+  .jadwal-top-ruangan-button.active {
+    background-color: #1e5aa0;
+    color: white;
+  }
+  
+  .jadwal-top-ruangan-button:first-child {
+    border-radius: 4px 0 0 4px; /* Button 1 border radius */
+  }
+  
+  .jadwal-top-ruangan-button:last-child {
+    border-radius: 0 4px 4px 0; /* Button 2 border radius */
+  }
+  
+  .jadwal-bottom {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    justify-content: end;
+    margin: 10px 0px;
+  }
+  
+  .keterangan {
+    padding: 4px 16px;
+    border-radius: 4px;
+    font-size: 14px;
+  }
+  
+  .setuju {
+    background-color: #4b7bb3;
+    color: white;
+  }
+  
+  .proses {
+    background-color: #e6e6e6;
+  }
+  
+  .batal {
+    background-color: #ffa6a6;
+  }
+
+ 
+ 

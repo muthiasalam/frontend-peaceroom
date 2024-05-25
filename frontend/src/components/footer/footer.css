@@ -1,0 +1,29 @@
+.footer {
+    padding: 30px;
+    color: #ffffff;
+    text-align: center;
+    background-color: #113258;
+    margin-top: 100px;
+    gap: 30px;
+    display: flex; /* Menjadikan konten menjadi flex */
+    flex-direction: column; /* Menjadikan konten tersusun dalam kolom */
+    align-items: center; /* Menyamakan konten ke tengah secara vertikal */
+    justify-content: center; /* Menyamakan konten ke tengah secara horizontal */
+  }
+  
+  .footer h2 {
+    margin-bottom: 10px;
+    font-size: 20px;
+  }
+  
+  .footer img {
+    width: 220.33px;
+  height: 60px;
+  gap: 15.31px;
+  opacity: 0px;
+  
+  }
+  
+  .footer_component p {
+    font-size: 10px;
+  }

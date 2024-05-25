@@ -1,0 +1,86 @@
+.room-container {
+    gap: 0px;
+    opacity: 0px;
+  }
+  
+  .room-beranda {
+    opacity: 0px;
+    width: Hug (450px) px;
+    height: Hug (689px) px;
+    opacity: 0px;
+  }
+  
+  .room-beranda img {
+    width: 400px;
+    height: 450px;
+  
+    border-radius: 16px 16px 16px 16px;
+    opacity: 0px;
+    object-fit: cover;
+    display: block;
+    margin: 0;
+    padding: 0;
+  }
+  
+  .jenis-ruangan {
+    width: 450px;
+    height: 189px;
+    padding: 25px 24px 25px 24px;
+    gap: 17px;
+    border-radius: 0px 0px 15.07px 15.07px;
+    opacity: 0px;
+  }
+  
+  .jenis-ruangan p {
+    width: 342px;
+    height: 30px;
+    gap: 17px;
+    opacity: 0px;
+    width: 154px;
+    font-family: Roboto;
+    font-size: 25px;
+    font-weight: 700;
+    line-height: 30px;
+    text-align: left;
+    margin-bottom: 10px;
+  }
+  
+  .container {
+    display: flex;
+    justify-content: space-beetwen;
+    gap: 100px;
+  }
+  
+  table {
+    width: 402px;
+    height: 92px;
+    gap: 40px;
+  }
+  
+  table.detail-left {
+    width: 95px;
+    height: 92px;
+    opacity: 1;
+  }
+  
+  table.detail-right {
+    width: 120px;
+    height: 92px;
+    opacity: 1;
+  }
+  
+  .rooms-container {
+    display: flex;
+    flex-direction: column;
+    gap: 0px;
+    opacity: 0px;
+  }
+  
+  .rooms-wrap {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 100px;
+    opacity: 0px;
+  }

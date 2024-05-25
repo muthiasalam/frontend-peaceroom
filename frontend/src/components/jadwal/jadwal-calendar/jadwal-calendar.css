@@ -1,0 +1,59 @@
+.rbc-btn-group-left button,  .rbc-btn-group-right button{
+    /* color: #373a3c; */
+    /* display: inline-block; */
+    /* margin: 0; */
+    text-align: center;
+    /* vertical-align: middle; */
+    /* background: none; */
+    
+    
+    padding: 0.375rem 1rem;
+    border-radius: 4px;
+    line-height: normal;
+    border: none;
+    font-size: 14px;
+    outline: none;
+    cursor: pointer;
+    box-shadow: none;
+    }
+
+
+    
+
+    .rbc-toolbar .rbc-toolbar-label {
+        flex-grow: 1;
+        padding: 0 10px;
+        text-align: center;
+        transition: none;
+    }
+
+    .rbc-toolbar button:hover {
+       
+        box-shadow: none;
+        
+        
+    }
+
+   
+    .rbc-toolbar .rbc-btn-group-left button, .rbc-toolbar .rbc-btn-group-right button {
+        background-color: transparent; /* Menghapus latar belakang */
+      }
+      
+      .rbc-toolbar .rbc-btn-group-left button:hover {
+        background-color: #e6e6e6; /* Menambah latar belakang saat hover */
+      }
+    
+   
+
+      .rbc-toolbar .rbc-btn-group-right button:hover{
+        background-color: transparent;
+      }
+  
+    
+      
+      .rbc-toolbar .rbc-btn-group-right button.active {
+        background-color: #e6e6e6;
+        
+      }
+      
+
