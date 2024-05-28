@@ -1,0 +1,71 @@
+.notifikasi-page{
+    padding: 0 50px;
+
+}
+.notifikasi-page-container{
+    height: 100%;
+
+}
+
+
+  /* Sesuaikan nilai margin-left sesuai kebutuhan */
+  
+
+.notifikasi-header{
+    display : flex;
+    justify-content: end;
+}
+.notifikasi-header-element{
+  display : flex;
+  justify-content: space-between;
+  gap: 20px;
+  margin-top: 30px;
+}
+
+.title-container{
+    display: flex;
+    justify-content: space-between;
+    align-content: center;
+    margin: 30px 0px;
+}
+
+.title{
+    font-size: 28px;
+    font-weight: 400;
+}
+
+
+
+
+.notifikasi-page-container{
+    display:flex;
+   
+}
+main{
+    width: 100%;
+    padding: 20px;
+}
+
+.notifikasi-content-top{
+    display: flex;
+   
+    justify-content: space-between;
+}
+
+.notifikasi-content{
+    width: 100%;
+    
+}
+        
+.notifikasi-content-chart{
+    width:100%;
+    display: flex;
+    justify-content: center;
+  
+}
+
+.notifikasi-content-container{
+    display: flex;
+    flex-direction: column;
+    gap: 80px
+}

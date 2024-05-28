@@ -58,6 +58,12 @@ export default function Dashboard() {
           label: room.name,
         }));
         setRooms(roomOptions);
+
+        // Set default room to "Ruang Rapat" if available
+        const defaultRoom = roomOptions.find(room => room.label === "Ruang Rapat");
+        if (defaultRoom) {
+          setSelectedRoom(defaultRoom.value);
+        }
       } catch (error) {
         console.error('Error fetching rooms:', error);
         message.error('Error fetching rooms');
@@ -117,8 +123,8 @@ export default function Dashboard() {
       datasets: [{
         label: 'Frekuensi Penggunaan Ruangan',
         data: dataCounts,
-        borderColor: 'rgba(75,192,192,1)',
-        backgroundColor: 'rgba(75,192,192,0.2)',
+        borderColor: '#A4C0F5',
+        backgroundColor: '#A4C0F5',
       }],
     };
   };
@@ -152,8 +158,8 @@ export default function Dashboard() {
       datasets: [{
         label: 'Jumlah Kunjungan',
         data: visitCounts,
-        backgroundColor: 'rgba(153, 102, 255, 0.6)',
-        borderColor: 'rgba(153, 102, 255, 1)',
+        backgroundColor: '#A4C0F5',
+        borderColor: '#A4C0F5',
       }]
     };
   };
@@ -198,6 +204,7 @@ export default function Dashboard() {
                 style={{ width: '15%' }}
                 placeholder="Pilih Ruangan"
                 options={rooms}
+                value={selectedRoom}
                 onChange={handleRoomChange}
               />
             </div>

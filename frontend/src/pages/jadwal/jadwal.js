@@ -2,12 +2,14 @@ import React, { useState, useEffect, useRef } from "react";
 import Header from "../../components/header/header";
 import CalendarComponent from "../../components/jadwal/jadwal-calendar/jadwal-calendar";
 import FormPengajuan from "../../components/jadwal/jadwal-form/jadwal-form";
-import { Input, message } from "antd";
+import { Input, message, Select } from "antd"; // Import Select dari Ant Design
 import "./jadwal.css";
 import { createData, fetchData, fetchDataRo } from "../../server/api";
 import { Popup } from "../../components/jadwal/jadwal-form-success/jadwal-form-success";
 import EventDetailPopup from "../../components/jadwal/jadwal-detail/jadwal-detail";
 import moment from 'moment';
+
+const { Option } = Select;
 
 export default function Jadwal() {
   const [data, setData] = useState([]);
@@ -18,7 +20,7 @@ export default function Jadwal() {
   const [isSuccessPopupOpen, setIsSuccessPopupOpen] = useState(false);
   const [newBookingId, setNewBookingId] = useState(null);
 
-  const calendarRef = useRef(null); // Add ref
+  const calendarRef = useRef(null);
 
   useEffect(() => {
     const fetchRooms = async () => {
@@ -46,10 +48,10 @@ export default function Jadwal() {
     setIsPopupOpen(false);
   };
 
-  const handleRuanganClick = (ruanganName) => {
-    const selectedRoom = ruanganList.find(room => room.name === ruanganName);
+  const handleRuanganChange = (ruanganId) => {
+    setActiveRuangan(ruanganId);
+    const selectedRoom = ruanganList.find(room => room._id === ruanganId);
     if (selectedRoom) {
-      setActiveRuangan(selectedRoom._id);
       console.log(`Selected Room ID: ${selectedRoom._id}`);
     }
   };
@@ -80,54 +82,58 @@ export default function Jadwal() {
 
   return (
     <>
-    <Header />
-    <div className="jadwal-main">
-      <div className="jadwal-top">
-        <div className="jadwal-top-left">
-          <h2>Jadwal Penggunaan Peace Room</h2>
-        </div>
-        <div className="jadwal-top-right">
-          <div className="jadwal-top-ruangan">
-            {ruanganList.map(room => (
-              <button
-                key={room._id}
-                className={`jadwal-top-ruangan-button ${activeRuangan === room._id ? "active" : ""}`}
-                onClick={() => handleRuanganClick(room.name)}
+      <Header />
+      <div className="jadwal-main">
+        <div className="jadwal-top">
+          <div className="jadwal-top-left">
+            <h2>Jadwal Penggunaan Peace Room</h2>
+          </div>
+          <div className="jadwal-top-right">
+            <div className="jadwal-top-ruangan">
+              <Select
+                style={{ width: 150 }}
+                value={activeRuangan}
+                onChange={handleRuanganChange}
               >
-                {room.name}
-              </button>
-            ))}
-          </div>
-          <button className="button-jadwal" onClick={openPopup}>Tambah Jadwal</button>
-        </div>
-      </div>
-
-      <div className="jadwal-middle">
-        <CalendarComponent ref={calendarRef} activeRuangan={activeRuangan} onSelectEvent={handleSelectEvent} />
-      </div>
-      <div className="jadwal-bottom">
-        <span className="keterangan setuju">Disetujui</span>
-        <span className="keterangan proses">Diproses</span>
-        <span className="keterangan batal">Dibatalkan</span>
-      </div>
-
-      {isPopupOpen && (
-        <div className="popup-container">
-          <div className="popup">
-            <FormPengajuan onSubmit={handleCreateData} onClose={closePopup} />
+                {ruanganList.map(room => (
+                  <Option key={room._id} value={room._id}>
+                    {room.name}
+                  </Option>
+                ))}
+              </Select>
+            </div>
+            <button className="button-jadwal" onClick={openPopup}>Tambah Jadwal</button>
           </div>
         </div>
-      )}
-      {isSuccessPopupOpen && (
-        <div className="popup-container">
-          <div className="popup">
-          <Popup onClose={closeSuccessPopup} newBookingId={newBookingId} /> 
-        </div></div>
-      )}
 
-      {selectedEvent && (
-        <EventDetailPopup selectedEvent={selectedEvent} handleClosePopup={handleClosePopup} />
-      )}
-    </div></>
+        <div className="jadwal-middle">
+          <CalendarComponent ref={calendarRef} activeRuangan={activeRuangan} onSelectEvent={handleSelectEvent} />
+        </div>
+        <div className="jadwal-bottom">
+          <span className="keterangan setuju">Disetujui</span>
+          <span className="keterangan proses">Diproses</span>
+          <span className="keterangan batal">Dibatalkan</span>
+        </div>
+
+        {isPopupOpen && (
+          <div className="popup-container">
+            <div className="popup">
+              <FormPengajuan onSubmit={handleCreateData} onClose={closePopup} />
+            </div>
+          </div>
+        )}
+        {isSuccessPopupOpen && (
+          <div className="popup-container">
+            <div className="popup">
+              <Popup onClose={closeSuccessPopup} newBookingId={newBookingId} />
+            </div>
+          </div>
+        )}
+
+        {selectedEvent && (
+          <EventDetailPopup selectedEvent={selectedEvent} handleClosePopup={handleClosePopup} />
+        )}
+      </div>
+    </>
   );
 }

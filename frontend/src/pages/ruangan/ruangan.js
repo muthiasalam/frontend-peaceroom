@@ -3,12 +3,24 @@ import Navbar from "../../components/sidebar/sidebar";
 import "./styleRuangan.css";
 import MenuRuangan from "../../components/ruangan-admin/ruangan";
 import UploadIcon from '@mui/icons-material/Upload';
-import { fetchDataRo, createDataRo } from "../../server/api"; // Sesuaikan jalur impor
+import { fetchDataRo, createDataRo } from "../../server/api";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../authContext";
 
 const Ruangan = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isAddRoomModalOpen, setIsAddRoomModalOpen] = useState(false);
   const [rooms, setRooms] = useState([]);
+  const navigate = useNavigate();
+  const { isLoggedIn, username } = useAuth();
+
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (!isLoggedIn || !token) {
+      navigate('/login');
+    }
+  }, [isLoggedIn, navigate]);
+
   const [newRoomData, setNewRoomData] = useState({
     name: "",
     table: 0,
@@ -106,14 +118,19 @@ const Ruangan = () => {
     document.getElementById('imageUpload').click();
   };
 
+  const handleStatusLinkClick = () => {
+    navigate('/status');
+  };
   return (
     <div>
       <div className="ruangan-page-container">
         <Navbar className="navbar" isSidebarOpen={isSidebarOpen} setIsSidebarOpen={setIsSidebarOpen} />
         <main className="ruangan-page" style={{ marginLeft: isSidebarOpen ? '200px' : '60px' }}>
-          <div className="admin-name">
-            <span className="admin">Admin789</span>
-          </div>
+        <div className="userClass">
+        <div className="userClass1">
+          <span className="user">{username}</span>
+          <span className="status-ruangan-link" onClick={handleStatusLinkClick}>Status Ruangan</span></div>
+        </div>
           <div className="title-ruangan">
             <div className="title">Galeri Ruangan Peace Room</div>
             <button className="button-ruangan" onClick={openAddRoomModal}>Tambah Ruangan</button>

@@ -1,5 +1,5 @@
 import { Routes, Route, BrowserRouter as Router } from 'react-router-dom';
-import { Beranda, Jadwal, Login, Peminjaman, Ruangan, Dashboard, Status } from "../pages";
+import { Beranda, Jadwal, Login, Peminjaman, Ruangan, Dashboard, Status, Notifikasi } from "../pages";
 import ProtectedRoute from '../protectedRoute'; // Import ProtectedRoute
 import { AuthProvider } from '../authContext'; // Import AuthProvider
 
@@ -13,6 +13,7 @@ const Routers = () => {
           <Route path="/dashboard" element={<ProtectedRoute element={<Dashboard />} />} />
           <Route path="/peminjaman" element={<ProtectedRoute element={<Peminjaman />} />} />
           <Route path="/ruangan" element={<ProtectedRoute element={<Ruangan />} />} />
+          <Route path="/notifikasi" element={<ProtectedRoute element={<Notifikasi />} />} />
           <Route path="/jadwal" element={<Jadwal />} />
           <Route path="/status" element={<Status />} />
         </Routes>
