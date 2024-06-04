@@ -102,6 +102,7 @@ export default function Jadwal() {
                 ))}
               </Select>
             </div>
+            <button className="button-jadwal" onClick={openPopup}>Tambah Jadwal</button>
           </div>
         </div>
 
