@@ -57,15 +57,35 @@ main{
     
 }
         
-.notifikasi-content-chart{
-    width:100%;
+.notifikasi-content-box{
+    margin-top: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 2px 0px rgba(204, 204, 204, 1);
+    padding: 20px;
     display: flex;
-    justify-content: center;
-  
+    align-items: center;
+    justify-content: space-between;
 }
 
-.notifikasi-content-container{
+.notifikasi-content-box-left{
     display: flex;
-    flex-direction: column;
-    gap: 80px
+    flex-direction: fow;
+    gap: 20px;
+    align-items: center;
+}
+
+.profile-pic{
+    width: 65px;
+}
+
+.notifikasi-content-username{
+    font-size: 20px;
+}
+
+.notifikasi-button{
+    padding: 8px 16px;
+    color: white;
+    background-color: #CD5E5E;
+    border: none;
+    border-radius: 4px;
 }

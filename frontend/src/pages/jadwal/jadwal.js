@@ -28,7 +28,7 @@ export default function Jadwal() {
         const rooms = await fetchDataRo();
         setRuanganList(rooms);
 
-        const defaultRoom = rooms.find(room => room.name === "Ruang CCTV");
+        const defaultRoom = rooms.find(room => room.name === "Ruang Control");
         if (defaultRoom) {
           setActiveRuangan(defaultRoom._id);
         }
@@ -102,7 +102,6 @@ export default function Jadwal() {
                 ))}
               </Select>
             </div>
-            <button className="button-jadwal" onClick={openPopup}>Tambah Jadwal</button>
           </div>
         </div>
 

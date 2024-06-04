@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Select, message } from "antd";
 import './dashboard.css';
 import Navbar from "../../components/sidebar/sidebar";
@@ -16,10 +16,15 @@ import {
   Tooltip,
   Legend
 } from 'chart.js';
-import { Line, Bar } from 'react-chartjs-2';
-import moment from 'moment';
+import { Line, Bar, Pie } from "react-chartjs-2";
+import moment from "moment";
+import EventAvailableIcon from "@mui/icons-material/EventAvailable";
+import EventBusyOutlinedIcon from "@mui/icons-material/EventBusyOutlined";
+import EventRepeatOutlinedIcon from "@mui/icons-material/EventRepeatOutlined";
+import AssessmentOutlinedIcon from "@mui/icons-material/AssessmentOutlined";
+import { Chart, ArcElement } from "chart.js";
+Chart.register(ArcElement);
 
-// Register the required components for ChartJS
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -38,9 +43,111 @@ export default function Dashboard() {
   const [bookingData, setBookingData] = useState([]);
   const [allBookingData, setAllBookingData] = useState([]);
   const [instances, setInstances] = useState([]);
-  
+  const [totals, setTotals] = useState({
+    disetujui: 0,
+    dibatalkan: 0,
+    diproses: 0,
+    total: 0,
+  });
+  const [pieChartData, setPieChartData] = useState({
+    labels: ["Disetujui", "dibatalkan"],
+    datasets: [
+      {
+        label: "Persentase Status Peminjaman",
+        backgroundColor: ["rgba(75, 192, 192, 0.6)", "rgba(255, 99, 132, 0.6)"],
+        data: [0, 0],
+      },
+    ],
+  });
+
+  const pieChartOptions = {
+    plugins: {
+      legend: {
+        position: "bottom",
+        align: "center",
+        labels: {
+          alignText: "center",
+          padding: 20,
+        },
+      },
+    },
+    elements: {
+      arc: {
+        borderWidth: 0,
+      },
+    },
+  };
+
+  const roomUsagePieChartOptions = {
+    plugins: {
+      legend: {
+        position: "bottom",
+        align: "center",
+        labels: {
+          alignText: "center",
+          align: "center",
+          padding: 20,
+        },
+      },
+    },
+    elements: {
+      arc: {
+        borderWidth: 0,
+      },
+    },
+  };
+
+  const [roomUsageData, setRoomUsageData] = useState([]);
+
+  useEffect(() => {
+    const fetchRoomUsageData = async () => {
+      try {
+        const rooms = await fetchDataRo();
+        const bookings = await fetchData();
+        const totalBookings = bookings.length;
+
+        const roomUsage = rooms.map((room) => {
+          const bookingsForRoom = bookings.filter(
+            (booking) => booking.room === room._id
+          );
+          const bookingCount = bookingsForRoom.length;
+          const percentage = (bookingCount / totalBookings) * 100;
+          return {
+            name: room.name,
+            percentage: percentage.toFixed(2),
+          };
+        });
+
+        setRoomUsageData(roomUsage);
+      } catch (error) {
+        console.error("Error fetching room usage data:", error);
+        message.error("Error fetching room usage data");
+      }
+    };
+
+    fetchRoomUsageData();
+  }, []);
+
+  const roomUsagePieChartData = {
+    labels: roomUsageData.map((room) => room.name),
+    datasets: [
+      {
+        label: "Persentase Penggunaan Ruangan",
+        backgroundColor: ["rgba(255, 234, 46, 0.33)", "rgba(164, 245, 201, 1)"],
+        data: roomUsageData.map((room) => room.percentage),
+      },
+    ],
+  };
+
   const navigate = useNavigate();
+  const handleButtonClick = () => {
+    navigate("/peminjaman");
+  };
   const { isLoggedIn, username } = useAuth();
+  const pieChartRef = useRef(null);
+  
+  
+  
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -79,22 +186,66 @@ export default function Dashboard() {
         const data = await fetchData();
         setAllBookingData(data);
 
+        const statusCounts = data.reduce(
+          (acc, booking) => {
+            if (booking.status === "Disetujui") acc.disetujui += 1;
+            if (booking.status === "dibatalkan") acc.dibatalkan += 1;
+            if (booking.status === "Diproses") acc.diproses += 1;
+            return acc;
+          },
+          { disetujui: 0, dibatalkan: 0, diproses: 0 }
+        );
+
+        // Menghitung total peminjaman
+        statusCounts.total = Object.values(statusCounts).reduce(
+          (a, b) => a + b,
+          0
+        );
+
+        setTotals(statusCounts);
+
+        const approvedPercentage =
+          (statusCounts.disetujui / statusCounts.total) * 100;
+        const rejectedPercentage =
+          (statusCounts.dibatalkan / statusCounts.total) * 100;
+
+        // Update pie chart data
+        setPieChartData({
+          labels: ["Disetujui", "dibatalkan"],
+          datasets: [
+            {
+              label: "Persentase Status Peminjaman",
+              backgroundColor: [
+                "rgba(164, 192, 245, 1)",
+                "rgba(255, 46, 46, 0.33)",
+              ],
+              data: [approvedPercentage, rejectedPercentage],
+            },
+          ],
+        });
+
         if (selectedRoom) {
-          const filteredData = data.filter(booking => 
-            booking.room === selectedRoom && 
-            booking.status === "Disetujui" &&
-            moment(booking.date).isBetween(moment().subtract(6, 'days').startOf('day'), moment().endOf('day'))
+          const filteredData = data.filter(
+            (booking) =>
+              booking.room === selectedRoom &&
+              booking.status === "Disetujui" &&
+              moment(booking.date).isBetween(
+                moment().subtract(6, "days").startOf("day"),
+                moment().endOf("day")
+              )
           );
           setBookingData(filteredData);
         }
       } catch (error) {
-        console.error('Error fetching bookings:', error);
-        message.error('Error fetching bookings');
+        console.error("Error fetching bookings:", error);
+        message.error("Error fetching bookings");
       }
     };
 
     getBookings();
   }, [selectedRoom]);
+
+
 
   useEffect(() => {
     const getInstances = async () => {
@@ -196,6 +347,93 @@ export default function Dashboard() {
         <div className="title-container">
           <div className="title">Dashboard</div>
         </div>
+
+
+
+
+
+
+
+        <div className="dashboard-card-pie">
+          <div className="title-card">Rangkuman</div>
+          <div className="dashboard-card-container">
+            <div className="dashboard-card">
+              
+              <div className="card-cardacc cardd">
+                <button className="buttonku" onClick={handleButtonClick}>
+                  <div className="button-card-content">
+                    <div className="text-card-content">
+                      <span className="font-number">{totals.disetujui}</span>
+                      <span className="teks-card">Disetujui</span>
+                    </div>
+                    <EventAvailableIcon className="icon-card" />
+                  </div>
+                </button>
+              </div>
+              <div className="card-cardrejected cardd">
+                <button className="buttonku" onClick={handleButtonClick}>
+                  <div className="button-card-content">
+                    <div className="text-card-content">
+                      <span className="font-number">{totals.dibatalkan}</span>
+                      <span className="teks-card">dibatalkan</span>
+                    </div>
+                    <EventBusyOutlinedIcon className="icon-card" />
+                  </div>
+                </button>
+              </div>
+              <div className="card-cardprocess cardd">
+                <button className="buttonku" onClick={handleButtonClick}>
+                  <div className="button-card-content">
+                    <div className="text-card-content">
+                      <span className="font-number">{totals.diproses}</span>
+                      <span className="teks-card">Diproses</span>
+                    </div>
+                    <EventRepeatOutlinedIcon className="icon-card" />
+                  </div>
+                </button>
+              </div>
+              <div className="card-cardtotal cardd">
+                <button className="buttonku" onClick={handleButtonClick}>
+                  <div className="button-card-content">
+                    <div className="text-card-content">
+                      <span className="font-number">{totals.total}</span>
+                      <span className="teks-card">Total</span>
+                    </div>
+                    <AssessmentOutlinedIcon className="icon-card" />
+                  </div>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        
+        <div className="pie-chart-container">
+          <div className="status-pie-chart">
+            <div className="title-pie">Persentase Status</div>
+            <div className="pie-chart">
+              <Pie
+                className="status-pie"
+                ref={pieChartRef}
+                data={pieChartData}
+                options={pieChartOptions}
+              />
+            </div>
+          </div>
+          <div className="rooms-pie-chart">
+            <div className="title-pie">Persentase Penggunaan Ruangan</div>
+            <div className="pie-chart">
+              <Pie
+                className="room-pie"
+                data={roomUsagePieChartData}
+                options={roomUsagePieChartOptions}
+              />
+            </div>
+          </div>
+        </div>
+
+
+
         <div className="dashboard-content-container">
           <div className="dashboard-content">
             <div className="dashboard-content-top">
@@ -216,7 +454,7 @@ export default function Dashboard() {
           </div>
           <div className="dashboard-content">
             <div className="dashboard-content-top">
-              <div className="dashboard-content-title">5 Instansi Paling Sering Berkunjung</div>
+              <div className="dashboard-content-title">Instansi Paling Sering Berkunjung</div>
             </div>
             <div className="dashboard-content-chart">
             <div className="chart-frekuensi">

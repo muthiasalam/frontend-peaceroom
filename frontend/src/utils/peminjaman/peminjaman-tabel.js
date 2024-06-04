@@ -1,4 +1,4 @@
-  // @/src/hooks/useTable.js
+ 
   import { useState, useEffect } from "react";
 
   

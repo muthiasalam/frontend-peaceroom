@@ -1,5 +1,5 @@
 import React from "react";
-import { DoorOpen, Calendar, ChevronsRight, ChevronsLeft, LogOut, TrendingUp, Bell } from "lucide-react";
+import { DoorOpen, Calendar, ChevronsRight, ChevronsLeft, LogOut, TrendingUp, UserRound } from "lucide-react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { useAuth } from "../../authContext";
 import "./sidebar.css";
@@ -32,9 +32,9 @@ const Navbar = ({ children, isSidebarOpen, setIsSidebarOpen }) => {
       icon: <TrendingUp className="icon" />,
     },
     {
-      path: "/notifikasi",
-      name: "Notifikasi",
-      icon: <Bell className="icon" />,
+      path: "/akun",
+      name: "Akun",
+      icon: <UserRound className="icon" />,
     }
 
   ];

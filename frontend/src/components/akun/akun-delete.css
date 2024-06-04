@@ -1,0 +1,33 @@
+.popup-header{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+ }
+
+ .popup-akun-delete-title{
+    font-size: 20px;
+ }
+
+ .popup-akun-confirm{
+    font-size: 14px;
+
+ }
+
+ .popup-akun-content{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+ }
+
+ .akun-delete-button{
+    padding: 8px 16px;
+    background-color: #CD5E5E ;
+    color: white;
+    border: none;
+    border-radius: 4px;
+ }
+
+ .popup-footer{
+    display: flex;
+    justify-content: flex-end;
+ }

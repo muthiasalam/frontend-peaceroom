@@ -13,6 +13,7 @@ const Table = ({ data, rowsPerPage, updateDataStatus, deleteData, onSelect }) =>
   const [selectedDeleteId, setSelectedDeleteId] = useState(null);
   const [instances, setInstances] = useState([]);
   const [rooms, setRooms] = useState([]);
+  const [filter, setFilter] = useState('semua');
 
   useEffect(() => {
     const getInstances = async () => {
@@ -69,9 +70,33 @@ const Table = ({ data, rowsPerPage, updateDataStatus, deleteData, onSelect }) =>
     return room ? room.name : id;
   };
 
+  const filteredData = filter === 'hariIni' 
+    ? data.filter(item => {
+        const itemDate = new Date(item.date).toLocaleDateString('id-ID');
+        const todayDate = new Date().toLocaleDateString('id-ID');
+        return itemDate === todayDate;
+      }) 
+    : data;
+
   return (
     <>
+    <div className="filter-button-container">
+      <div className="filter-buttons">
+        <button 
+          className={`filter-button ${filter === 'semua' ? 'active' : ''}`} 
+          onClick={() => setFilter('semua')}
+        >
+          Semua
+        </button>
+        <button 
+          className={`filter-button ${filter === 'hariIni' ? 'active' : ''}`} 
+          onClick={() => setFilter('hariIni')}
+        >
+          Hari Ini
+        </button>
+      </div></div>
       <div className="table-container">
+        
         <table className="table">
           <thead className="tableRowHeader">
             <tr>
@@ -85,7 +110,7 @@ const Table = ({ data, rowsPerPage, updateDataStatus, deleteData, onSelect }) =>
             </tr>
           </thead>
           <tbody>
-            {slice.map((el) => (
+            {filteredData.slice((page - 1) * rowsPerPage, page * rowsPerPage).map((el) => (
               <TableRow
                 key={el._id}
                 el={el}

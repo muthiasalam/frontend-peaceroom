@@ -13,6 +13,39 @@ export const fetchData = async () => {
   }
 };
 
+const API_ACC = "http://localhost:3001/auth/";
+
+export const fetchDataAcc = async () => {
+  try {
+    const response = await fetch(API_ACC);
+    if (!response.ok) {
+      throw new Error("Failed to fetch data");
+    }
+    return await response.json();
+  } catch (error) {
+    console.error("Error fetching data:", error);
+    throw error;
+  }
+};
+
+export const deleteAccount = async (id) => {
+  try {
+    const response = await fetch(`${API_ACC}${id}`, {
+      method: "DELETE",
+    });
+    if (!response.ok) {
+      throw new Error("Failed to delete account");
+    }
+    console.log("Account deleted successfully");
+  } catch (error) {
+    console.error("Error deleting room:", error);
+    throw error;
+  }
+};
+
+
+
+
 const API_INS = "http://localhost:3001/instances/";
 
 export const fetchDataIns = async () => {

@@ -130,6 +130,8 @@
     align-items: center;
 }
 
+.table-page-container
+
 
 .table-container::-webkit-scrollbar {
   display: none;
@@ -159,4 +161,32 @@
 .button-detail{
   background-color: #1E5AA0;
   color: white;
+}
+
+.filter-button-container {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 10px;
+  width: 100%;
+}
+
+
+
+.filter-buttons {
+  display: flex;
+  gap: 20px; /* Memberikan jarak antara tombol */
+}
+
+.filter-button {
+  padding: 8px 16px;
+  border: none;
+  background-color: white;
+  color: black;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.filter-button.active {
+  background-color: #f0f0f0;
+
 }
