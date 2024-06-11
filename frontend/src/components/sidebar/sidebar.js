@@ -12,7 +12,7 @@ const Navbar = ({ children, isSidebarOpen, setIsSidebarOpen }) => {
 
   const handleLogout = () => {
     logout();
-    navigate('/'); // Redirect ke halaman beranda setelah logout
+    navigate('/'); 
   };
 
   const menuItem = [
@@ -31,11 +31,7 @@ const Navbar = ({ children, isSidebarOpen, setIsSidebarOpen }) => {
       name: "Dashboard",
       icon: <TrendingUp className="icon" />,
     },
-    {
-      path: "/akun",
-      name: "Akun",
-      icon: <UserRound className="icon" />,
-    }
+   
 
   ];
   return (

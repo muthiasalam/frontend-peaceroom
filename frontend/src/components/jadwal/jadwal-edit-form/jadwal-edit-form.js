@@ -76,8 +76,41 @@ export default function FormEditPengajuan({ initialData, onSubmit, onClose, onUp
   }, [initialData]);
 
   const handleFileChange = ({ fileList }) => {
-    setFileList(fileList);
+    const allowedTypes = ['application/pdf', 'image/jpeg', 'image/jpg'];
+    const maxSize = 1024 * 1024; // 1MB
+  
+    // Filter fileList to only include allowed file types and sizes
+    const filteredFileList = fileList.filter(file => {
+      const isAllowedType = allowedTypes.includes(file.type);
+      const isAllowedSize = file.size <= maxSize;
+      if (!isAllowedType) {
+        message.error(`${file.name} bukan tipe file yang diizinkan. Silakan unggah file dengan tipe PDF/JPEG/JPG.`);
+      }
+      if (!isAllowedSize) {
+        message.error(`${file.name} melebihi ukuran maksimal 1MB. Silakan unggah file dengan ukuran yang lebih kecil.`);
+      }
+      return isAllowedType && isAllowedSize;
+    });
+  
+    // Check if there is already a file uploaded
+    if (filteredFileList.length > 1) {
+      const firstFile = filteredFileList[0];
+      const secondFile = filteredFileList[1];
+  
+      // Remove the first file and keep the second file
+      const updatedFileList = [secondFile];
+      
+      // Show message or perform action if desired
+      message.warning(`Hanya satu file yang diizinkan. ${firstFile.name} dibatalkan dan digantikan dengan ${secondFile.name}.`);
+      
+      // Set the updated fileList
+      setFileList(updatedFileList);
+    } else {
+      // If no multiple files, just set the filtered fileList
+      setFileList(filteredFileList);
+    }
   };
+  
 
   const onFinish = async (formData) => {
     try {
@@ -87,55 +120,71 @@ export default function FormEditPengajuan({ initialData, onSubmit, onClose, onUp
       const start_time = waktu[0].format('HH:mm');
       const end_time = waktu[1].format('HH:mm');
       const date = form.getFieldValue('date').toISOString();
+      const room = form.getFieldValue('room');
 
       const formattedData = {
         ...formData,
         tanggal: date,
         start_time,
         end_time,
+        room,
       };
 
+      // Ambil data yang sudah ada di database
       const existingData = await fetchData();
 
-      // Lakukan pengecekan konflik
       const isConflict = existingData.some(existing => {
-        if (existing._id !== initialData._id) {
+        const isNotCancelled = existing.status !== 'Dibatalkan';
+      
+        // Tambahkan filter pengecekan konflik hanya untuk data selain dirinya sendiri
+        const isNotSelf = existing._id !== initialData._id;
+      
         const sameDateTime = existing.room === formattedData.room &&
           existing.date === formattedData.tanggal &&
           existing.start_time === formattedData.start_time &&
           existing.end_time === formattedData.end_time;
-
+      
         const overlappingDateTime = existing.room === formattedData.room &&
           existing.date === formattedData.tanggal &&
           (
             (formattedData.start_time >= existing.start_time && formattedData.start_time < existing.end_time) ||
             (formattedData.end_time > existing.start_time && formattedData.end_time <= existing.end_time) ||
-            (formattedData.start_time <= existing.start_time && formattedData.end_time >= existing.end_time)
+            (formattedData.start_time < existing.start_time && formattedData.end_time > existing.end_time)
           );
-
+      
         const withinExistingDateTime = existing.room === formattedData.room &&
           existing.date === formattedData.tanggal &&
           formattedData.start_time >= existing.start_time &&
           formattedData.end_time <= existing.end_time;
-
+      
         const touchingDateTime = existing.room === formattedData.room &&
           existing.date === formattedData.tanggal &&
           (
             (formattedData.start_time >= existing.start_time && formattedData.start_time < existing.end_time) ||
-            (formattedData.end_time > existing.start_time && formattedData.end_time <= existing.end_time)
+            (formattedData.end_time > existing.start_time && formattedData.end_time <= existing.end_time) ||
+            (formattedData.start_time < existing.start_time && formattedData.end_time > existing.end_time) ||
+            (formattedData.start_time === existing.end_time) ||
+            (formattedData.end_time === existing.start_time)
           );
-
-        return sameDateTime || overlappingDateTime || withinExistingDateTime || touchingDateTime;}
+      
+        return isNotCancelled && isNotSelf && (sameDateTime || overlappingDateTime || withinExistingDateTime || touchingDateTime);
       });
-
 
       if (isConflict) {
         message.error('Konflik jadwal: Pilih Ruangan atau Jadwal yang lain!');
       } else {
         const updatedFormData = {
-          ...formattedData,
-          status: 'Diproses'
+          ...formattedData
         };
+
+        // Tambahkan logika pengecekan perubahan jadwal
+        const isDateChanged = initialData.date !== date;
+        const isTimeChanged = initialData.start_time !== start_time || initialData.end_time !== end_time;
+        const isRoomChanged = initialData.room !== room;
+
+        if (isDateChanged || isTimeChanged || isRoomChanged) {
+          updatedFormData.status = 'Rescheduled';
+        }
 
         const formDataToSend = new FormData();
         Object.keys(updatedFormData).forEach(key => {
@@ -164,7 +213,6 @@ export default function FormEditPengajuan({ initialData, onSubmit, onClose, onUp
           time: [moment(start_time, 'HH:mm'), moment(end_time, 'HH:mm')],
         });
       }
-
     } catch (error) {
       console.error('Error submitting form:', error);
       message.error('Error submitting form');
@@ -215,9 +263,14 @@ export default function FormEditPengajuan({ initialData, onSubmit, onClose, onUp
             <RangePicker format="HH:mm" style={{ width: '100%' }} />
           </Form.Item>
           <Form.Item label="Upload Surat" name="letter">
-          <Upload fileList={fileList} beforeUpload={() => false} onChange={handleFileChange} accept=".pdf,.jpeg">
-              <Button icon={<UploadOutlined />}>Upload (PDF/JPEG)</Button>
-            </Upload>
+          <Upload
+  fileList={fileList}
+  beforeUpload={() => false} // Mencegah unggahan langsung
+  onChange={handleFileChange}
+  accept=".pdf,.jpeg,.jpg"
+>
+  <Button icon={<UploadOutlined />}>Upload (PDF/JPEG/JPG)</Button>
+</Upload>
           </Form.Item>
           <Form.Item>
             <Button type="primary" htmlType="submit" loading={isSubmitting} style={{ width: '100%', color: 'white', backgroundColor: '#1E5AA0' }}>Submit</Button>

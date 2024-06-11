@@ -12,7 +12,7 @@ import "./beranda.css";
 export default function Beranda() {
   return (
     <>
-      <Header />
+      <Header/>
       <div className="home-component">
         <div className="img-beranda">
           <div className="new-logo">

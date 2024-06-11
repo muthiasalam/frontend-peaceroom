@@ -1,13 +1,17 @@
-
-
 .header-component {
   width: 100%;
-  height: Hug (75px) px;
+  height: 40px;
   padding: 15px 0 15px 0;
   justify-content: space-between;
   opacity: 0px;
   display: flex;
   flex-direction: row;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  background-color: white;
+  z-index: 999;
+  
 }
 
 .lambang {
@@ -16,29 +20,29 @@
   justify-content: start;
   align-items: center;
   gap: 16px;
-  margin-left: 30px
+  margin-left: 40px
 }
 
 .lambang img {
-    width: 200px;
+    width: 180px;
   height: auto;
   gap: 0px;
   opacity: 0px;
 }
 
 .nav-menu ul {
-  list-style-type: none; /* Menghapus poin daftar */
+  list-style-type: none;
   padding: 0;
   margin: 0;
-  display: flex; /* Mengatur tata letak menjadi flexbox */
+  display: flex;
   gap: 35px;
   opacity: 0px;
   align-items: center;
 }
 
 .nav-menu {
-  display: flex; /* Mengatur tata letak menjadi flexbox */
-  justify-content: center; /* Posisi vertikal ke tengah */
+  display: flex;
+  justify-content: center;
   margin-right: 30px
 }
 
@@ -49,9 +53,9 @@
   font-weight: 400;
   line-height: 19.2px;
   text-align: center;
-  border: none; /* Menghapus border */
-  padding: 0; /* Menghapus padding */
-  background-color: transparent; /* Menghapus warna latar belakang */
+  border: none;
+  padding: 0;
+  background-color: transparent;
   cursor: pointer;
   color: #000000;
 }
@@ -62,9 +66,9 @@
   font-weight: 400;
   line-height: 19.2px;
   text-align: center;
-  border: none; /* Menghapus border */
-  padding: 0; /* Menghapus padding */
-  background-color: transparent; /* Menghapus warna latar belakang */
+  border: none;
+  padding: 0;
+  background-color: transparent;
   cursor: pointer;
   color: #000000;
 }
@@ -76,9 +80,9 @@
   border-radius: 8px;
   opacity: 0px;
   background-color: #1e5aa0;
-  display: flex; /* Mengatur tata letak menjadi flexbox */
-  justify-content: center; /* Memusatkan secara horizontal */
-  align-items: center; /* Memusatkan secara vertikal */
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .nav-admin button:focus {
@@ -92,7 +96,7 @@
   line-height: 19.2px;
   text-align: center;
   color: #ffffff;
-  margin: 0; /* Menghapus margin bawaan */
+  margin: 0;
   cursor: pointer;
 }
 
@@ -106,18 +110,18 @@ button p {
 
 
 .logo-teks {
-  display: flex; /* Menggunakan flexbox */
-  align-items: center; /* Mengatur item ke tengah secara vertikal */
+  display: flex;
+  align-items: center;
   gap: 10px;
 }
 
 .logo-teks img {
-  margin-right: 10px; /* Memberikan jarak antara gambar dan teks */
+  margin-right: 10px;
 }
 
 .teks-logo {
-  display: flex; /* Menggunakan flexbox */
-  flex-direction: column; /* Menjadikan elemen teks-logo menjadi kolom */
+  display: flex;
+  flex-direction: column;
 }
 
 .siparua {

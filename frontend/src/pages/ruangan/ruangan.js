@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import Navbar from "../../components/sidebar/sidebar";
 import "./styleRuangan.css";
 import MenuRuangan from "../../components/ruangan-admin/ruangan";
-import UploadIcon from '@mui/icons-material/Upload';
+import UploadIcon from "@mui/icons-material/Upload";
 import { fetchDataRo, createDataRo } from "../../server/api";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../authContext";
@@ -10,17 +10,9 @@ import { useAuth } from "../../authContext";
 const Ruangan = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isAddRoomModalOpen, setIsAddRoomModalOpen] = useState(false);
-  const [rooms, setRooms] = useState([]);
   const navigate = useNavigate();
-  const { isLoggedIn, username } = useAuth();
-
-  useEffect(() => {
-    const token = localStorage.getItem('token');
-    if (!isLoggedIn || !token) {
-      navigate('/login');
-    }
-  }, [isLoggedIn, navigate]);
-
+  const { username } = useAuth();
+  const [rooms, setRooms] = useState([]);
   const [newRoomData, setNewRoomData] = useState({
     name: "",
     table: 0,
@@ -29,7 +21,7 @@ const Ruangan = () => {
     projector: 0,
     chair: 0,
     audio: 0,
-    image: ""
+    image: "",
   });
   const [imageFileName, setImageFileName] = useState("");
 
@@ -65,80 +57,90 @@ const Ruangan = () => {
   const handleImageUpload = (e) => {
     const file = e.target.files[0];
     if (file) {
-        setImageFileName(file.name);
-        setNewRoomData((prevData) => ({
-            ...prevData,
-            image: file,
-        }));
+      setImageFileName(file.name);
+      setNewRoomData((prevData) => ({
+        ...prevData,
+        image: file,
+      }));
     }
-};
-
+  };
 
   const handleAddRoom = async (e) => {
     e.preventDefault();
     const formData = new FormData();
-    formData.append('name', newRoomData.name);
-    formData.append('table', newRoomData.table);
-    formData.append('screen', newRoomData.screen);
-    formData.append('air_conditioner', newRoomData.air_conditioner);
-    formData.append('projector', newRoomData.projector);
-    formData.append('chair', newRoomData.chair);
-    formData.append('audio', newRoomData.audio);
+    formData.append("name", newRoomData.name);
+    formData.append("table", newRoomData.table);
+    formData.append("screen", newRoomData.screen);
+    formData.append("air_conditioner", newRoomData.air_conditioner);
+    formData.append("projector", newRoomData.projector);
+    formData.append("chair", newRoomData.chair);
+    formData.append("audio", newRoomData.audio);
     if (newRoomData.image) {
-        formData.append('image', newRoomData.image);
+      formData.append("image", newRoomData.image);
     }
 
     try {
-        const createdRoom = await createDataRo(formData); // Send FormData to the server
-        if (createdRoom) {
-            setRooms([...rooms, createdRoom]); // Add the new room to the room list
-            setNewRoomData({
-                name: "",
-                table: 0,
-                screen: 0,
-                air_conditioner: 0,
-                projector: 0,
-                chair: 0,
-                audio: 0,
-                image: ""
-            });
-            setImageFileName("");
-            closeAddRoomModal();
-        } else {
-            throw new Error("Failed to create room");
-        }
+      const createdRoom = await createDataRo(formData);
+      if (createdRoom) {
+        setRooms([...rooms, createdRoom]);
+        setNewRoomData({
+          name: "",
+          table: 0,
+          screen: 0,
+          air_conditioner: 0,
+          projector: 0,
+          chair: 0,
+          audio: 0,
+          image: "",
+        });
+        setImageFileName("");
+        closeAddRoomModal();
+      } else {
+        throw new Error("Failed to create room");
+      }
     } catch (error) {
-        console.error("Error adding room:", error.message);
-        // Handle error, e.g., show an error message to the user
+      console.error("Error adding room:", error.message);
     }
-};
-   
+  };
 
   const handleUploadButtonClick = () => {
-    document.getElementById('imageUpload').click();
+    document.getElementById("imageUpload").click();
   };
 
-  const handleStatusLinkClick = () => {
-    navigate('/status');
-  };
   return (
     <div>
       <div className="ruangan-page-container">
-        <Navbar className="navbar" isSidebarOpen={isSidebarOpen} setIsSidebarOpen={setIsSidebarOpen} />
-        <main className="ruangan-page" style={{ marginLeft: isSidebarOpen ? '200px' : '60px' }}>
-        <div className="userClass">
-        <div className="userClass1">
+        <Navbar
+          className="navbar"
+          isSidebarOpen={isSidebarOpen}
+          setIsSidebarOpen={setIsSidebarOpen}
+        />
+        <main
+          className="ruangan-page"
+          style={{ marginLeft: isSidebarOpen ? "200px" : "60px" }}
+        >
+          <div className="admin-name">
           <span className="user">{username}</span>
-          <span className="status-ruangan-link" onClick={handleStatusLinkClick}>Status Ruangan</span></div>
-        </div>
+            <span
+              className="status-ruangan-link"
+              onClick={() => navigate("/status")}
+            >
+              Status Ruangan
+            </span>
+          </div>
           <div className="title-ruangan">
             <div className="title">Galeri Ruangan Peace Room</div>
-            <button className="button-ruangan" onClick={openAddRoomModal}>Tambah Ruangan</button>
+            <button className="button-ruangan" onClick={openAddRoomModal}>
+              Tambah Ruangan
+            </button>
           </div>
         </main>
       </div>
       <div className="ruangan-content-container">
-        <main className="ruangan-page-position" style={{ marginLeft: isSidebarOpen ? '200px' : '60px' }}>
+        <main
+          className="ruangan-page-position"
+          style={{ marginLeft: isSidebarOpen ? "200px" : "60px" }}
+        >
           <MenuRuangan rooms={rooms} />
         </main>
       </div>
@@ -149,36 +151,85 @@ const Ruangan = () => {
             <form onSubmit={handleAddRoom}>
               <div className="nama-ruangan">
                 <label htmlFor="name">Nama</label>
-                <input type="text" id="name" name="name" value={newRoomData.name} onChange={handleInputChange} placeholder="Nama Ruangan" />
+                <input
+                  type="text"
+                  id="name"
+                  name="name"
+                  value={newRoomData.name}
+                  onChange={handleInputChange}
+                  placeholder="Nama Ruangan"
+                />
               </div>
               <div className="meja-layar">
                 <div className="input-group">
                   <label htmlFor="table">Meja</label>
-                  <input type="number" id="table" name="table" value={newRoomData.table} onChange={handleInputChange} placeholder="Jumlah Meja" />
+                  <input
+                    type="number"
+                    id="table"
+                    name="table"
+                    value={newRoomData.table}
+                    onChange={handleInputChange}
+                    placeholder="Jumlah Meja"
+                  />
                 </div>
                 <div className="input-group">
                   <label htmlFor="screen">Layar</label>
-                  <input type="number" id="screen" name="screen" value={newRoomData.screen} onChange={handleInputChange} placeholder="Jumlah Layar" />
+                  <input
+                    type="number"
+                    id="screen"
+                    name="screen"
+                    value={newRoomData.screen}
+                    onChange={handleInputChange}
+                    placeholder="Jumlah Layar"
+                  />
                 </div>
               </div>
               <div className="ac-proyektor">
                 <div className="input-group">
                   <label htmlFor="air_conditioner">AC</label>
-                  <input type="number" id="air_conditioner" name="air_conditioner" value={newRoomData.air_conditioner} onChange={handleInputChange} placeholder="Jumlah AC" />
+                  <input
+                    type="number"
+                    id="air_conditioner"
+                    name="air_conditioner"
+                    value={newRoomData.air_conditioner}
+                    onChange={handleInputChange}
+                    placeholder="Jumlah AC"
+                  />
                 </div>
                 <div className="input-group">
                   <label htmlFor="projector">Proyektor</label>
-                  <input type="number" id="projector" name="projector" value={newRoomData.projector} onChange={handleInputChange} placeholder="Jumlah Proyektor" />
+                  <input
+                    type="number"
+                    id="projector"
+                    name="projector"
+                    value={newRoomData.projector}
+                    onChange={handleInputChange}
+                    placeholder="Jumlah Proyektor"
+                  />
                 </div>
               </div>
               <div className="kursi-audio">
                 <div className="input-group">
                   <label htmlFor="chair">Kursi</label>
-                  <input type="number" id="chair" name="chair" value={newRoomData.chair} onChange={handleInputChange} placeholder="Jumlah Kursi" />
+                  <input
+                    type="number"
+                    id="chair"
+                    name="chair"
+                    value={newRoomData.chair}
+                    onChange={handleInputChange}
+                    placeholder="Jumlah Kursi"
+                  />
                 </div>
                 <div className="input-group">
                   <label htmlFor="audio">Audio</label>
-                  <input type="number" id="audio" name="audio" value={newRoomData.audio} onChange={handleInputChange} placeholder="Jumlah Audio" />
+                  <input
+                    type="number"
+                    id="audio"
+                    name="audio"
+                    value={newRoomData.audio}
+                    onChange={handleInputChange}
+                    placeholder="Jumlah Audio"
+                  />
                 </div>
               </div>
               <div className="gambar-ruangan">
@@ -187,7 +238,7 @@ const Ruangan = () => {
                   <input
                     type="file"
                     id="imageUpload"
-                    style={{ display: 'none' }}
+                    style={{ display: "none" }}
                     onChange={handleImageUpload}
                   />
                   <input
@@ -199,11 +250,15 @@ const Ruangan = () => {
                     placeholder="Silahkan upload gambar"
                   />
                   <button type="button" onClick={handleUploadButtonClick}>
-                    Upload <UploadIcon className="upload-icon" />
+                    <span className="button-content">
+                      Upload <UploadIcon className="upload-icon" />
+                    </span>
                   </button>
                 </div>
               </div>
-              <button className="button-tambahruangan" type="submit">Selesai</button>
+              <button className="button-tambahruangan" type="submit">
+                Selesai
+              </button>
             </form>
           </div>
         </div>

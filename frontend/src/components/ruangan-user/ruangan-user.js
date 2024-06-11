@@ -76,7 +76,7 @@ const Ruangan = () => {
           <RoomDetail
             key={room._id}
             roomName={room.name}
-            imageSource={`http://localhost:3001/uploads/images/${room.image}`} // Sesuaikan URL dasar
+            imageSource={`http://localhost:3001/uploads/images/${room.image}`}
             leftDetails={[
               { icon: <PanoramaWideAngleSelectIcon />, title: "Meja", count: room.table },
               { icon: <AcUnitIcon />, title: "AC", count: room.air_conditioner },

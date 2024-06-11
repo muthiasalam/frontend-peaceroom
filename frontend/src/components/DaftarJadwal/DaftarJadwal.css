@@ -1,41 +1,41 @@
 .daftar-jadwal h1 {
-    gap: 0px;
-    opacity: 0px;
-    font-family: Roboto;
-    font-size: 35px;
-    padding: 0px 150px 0px;
-    margin: 60px 60px;
-  }
-  
-  .daftar-jadwal table {
-    width: 75%;
-    border-collapse: collapse;
-    margin: 0 auto;
-  }
-  
-  .daftar-jadwal th,
-  .daftar-jadwal td {
-    border: 1px solid #ddd;
-    padding: 8px;
-    text-align: left;
-  }
-  
-  .daftar-jadwal th {
-    background-color: #f2f2f2;
-  }
-  
-  .daftar-jadwal .jam-col {
-    width: 20%;
-  }
-  
-  .daftar-jadwal .ruangan-col {
-    width: 20%;
-  }
-  
-  .daftar-jadwal .agenda-col {
-    width: 30%;
-  }
-  
-  .daftar-jadwal .peminjam-col {
-    width: 30%;
-  }
+  gap: 0px;
+  opacity: 0px;
+  font-family: Roboto;
+  font-size: 30px;
+  padding: 0px 150px 0px;
+  margin: 60px 60px;
+}
+
+.daftar-jadwal table {
+  width: 75%;
+  border-collapse: collapse;
+  margin: 0 auto;
+}
+
+.daftar-jadwal th,
+.daftar-jadwal td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+}
+
+.daftar-jadwal th {
+  background-color: #f2f2f2;
+}
+
+.daftar-jadwal .jam-col {
+  width: 20%;
+}
+
+.daftar-jadwal .ruangan-col {
+  width: 20%;
+}
+
+.daftar-jadwal .agenda-col {
+  width: 30%;
+}
+
+.daftar-jadwal .peminjam-col {
+  width: 30%;
+}

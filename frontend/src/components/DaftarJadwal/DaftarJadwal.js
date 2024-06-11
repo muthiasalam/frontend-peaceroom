@@ -12,28 +12,28 @@ const DaftarJadwal = () => {
         console.log("Fetching data...");
         const jsonData = await fetchData();
         console.log("Data received:", jsonData);
-// Mengambil tanggal hari ini dengan mempertimbangkan zona waktu lokal
-const today = new Date().toLocaleDateString('en-CA'); // 'en-CA' menghasilkan format yyyy-mm-dd
-console.log("Today's date:", today);
-
-const filteredData = jsonData.filter((item) => {
-  // Mengubah item.date menjadi objek Date dan mendapatkan tanggal dalam format yyyy-mm-dd
-  const itemDate = new Date(item.date).toLocaleDateString('en-CA');
-  console.log(`Item date: ${itemDate}, matches today: ${itemDate === today}`);
-  return itemDate === today;
-});
-
-console.log("Filtered data:", filteredData);
-
-
+  
+        const today = new Date().toLocaleDateString('en-CA');
+        console.log("Today's date:", today);
+  
+        const filteredData = jsonData.filter((item) => {
+          
+          const itemDate = new Date(item.date).toLocaleDateString('en-CA');
+          console.log(`Item date: ${itemDate}, matches today: ${itemDate === today}`);
+         
+          return (itemDate === today && (item.status === "Disetujui" || item.status === "Rescheduled"));
+        });
+  
+        console.log("Filtered data:", filteredData);
         setData(filteredData);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
     };
-
     fetchDataAsync();
   }, []);
+  
+  
 
   useEffect(() => {
     const fetchRoomsAsync = async () => {
@@ -78,7 +78,9 @@ console.log("Filtered data:", filteredData);
               <tr key={item._id}>
                 <td className="jam-col">{`${item.start_time} - ${item.end_time}`}</td>
                 <td className="ruangan-col">{getRoomNameById(item.room)}</td>
-                <td className="jenis-pertemuan-col">{item.conference_type === 'Offline' ? 'Offline' : 'Online'}</td>
+                <td className="jenis-pertemuan-col">
+                  {item.conference_type === "Offline" ? "Offline" : "Online"}
+                </td>
                 <td className="peminjam-col">{item.name}</td>
                 <td className="peminjam-col">{item.activity}</td>
               </tr>

@@ -4,50 +4,42 @@ import { ChevronRight, ChevronLeft } from "lucide-react";
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import './jadwal-calendar.css';
 import moment from 'moment';
-import { fetchData } from '../../../server/api'; // Sesuaikan path dengan struktur proyek Anda
 
 const localizer = momentLocalizer(moment);
 
-function CalendarComponent({ activeRuangan, onSelectEvent }) {
+function CalendarComponent({ activeRuangan, data, onSelectEvent }) {
   const [eventList, setEventList] = useState([]);
-  const [activeView, setActiveView] = useState('month'); // Menyimpan tampilan aktif
-  const [currentDate, setCurrentDate] = useState(new Date()); // Menyimpan tanggal aktif
+  const [activeView, setActiveView] = useState('month');
+  const [currentDate, setCurrentDate] = useState(new Date());
 
   useEffect(() => {
-    if (activeRuangan) {
-      fetchData()
-        .then(data => {
-          // Memfilter event berdasarkan roomId yang sesuai dengan activeRuangan
-          const filteredEvents = data.filter(item => item.room === activeRuangan);
-          const formattedEvents = filteredEvents.map(item => ({
-            id: item.id,
-            idItem: item._id,
-            title: item.activity,
-            start: moment(item.date).set({ hour: moment(item.start_time, 'HH:mm').hour(), minute: moment(item.start_time, 'HH:mm').minute() }).toDate(),
-            end: moment(item.date).set({ hour: moment(item.end_time, 'HH:mm').hour(), minute: moment(item.end_time, 'HH:mm').minute() }).toDate(),
-            instansi: item.instance,
-            status: item.status,
-            color: getStatusColor(item.status),
-          }));
-          setEventList(formattedEvents);
-        })
-        .catch(error => {
-          console.error("Error fetching data:", error);
-        });
+    if (activeRuangan && data) {
+      const filteredEvents = data.filter(item => item.room === activeRuangan);
+      const formattedEvents = filteredEvents.map(item => ({
+        id: item.id,
+        idItem: item._id,
+        title: item.activity,
+        start: moment(item.date).set({ hour: moment(item.start_time, 'HH:mm').hour(), minute: moment(item.start_time, 'HH:mm').minute() }).toDate(),
+        end: moment(item.date).set({ hour: moment(item.end_time, 'HH:mm').hour(), minute: moment(item.end_time, 'HH:mm').minute() }).toDate(),
+        instansi: item.instance,
+        ruangan: item.room,
+        status: item.status,
+        color: getStatusColor(item.status),
+      }));
+      setEventList(formattedEvents);
     }
-  }, [activeRuangan]); // Ubah dependency array agar pengambilan data terjadi setiap kali activeRuangan berubah
+  }, [activeRuangan, data]);
 
-  // Fungsi untuk mendapatkan warna berdasarkan status
   const getStatusColor = (status) => {
     switch (status) {
-      case 'Diproses':
-        return '#e6e6e6';
+      case 'Rescheduled':
+        return '#a3cd3f';
       case 'Dibatalkan':
         return '#FFA6A6';
       case 'Disetujui':
         return '#4B7BB3';
       default:
-        return '#e6e6e6'; // Default jika status tidak cocok
+        return '#e6e6e6';
     }
   };
 
@@ -55,7 +47,7 @@ function CalendarComponent({ activeRuangan, onSelectEvent }) {
     return {
       style: {
         backgroundColor: event.color,
-        color: event.color === '#4B7BB3' ? 'white' : 'black', // Tulisan putih jika latar belakang biru, hitam jika merah muda
+        color: event.color === '#4B7BB3' ? 'white' : 'black',
         fontSize: 14
       }
     };
@@ -74,10 +66,9 @@ function CalendarComponent({ activeRuangan, onSelectEvent }) {
         case 'day':
           newDate.setDate(newDate.getDate() - 1);
           break;
-          case 'agenda':
+        case 'agenda':
           newDate.setDate(newDate.getDate() - 1);
           break;
-        
         default:
           break;
       }
@@ -97,9 +88,9 @@ function CalendarComponent({ activeRuangan, onSelectEvent }) {
         case 'day':
           newDate.setDate(newDate.getDate() + 1);
           break;
-          case 'agenda':
-            newDate.setDate(newDate.getDate() + 1);
-            break;
+        case 'agenda':
+          newDate.setDate(newDate.getDate() + 1);
+          break;
         default:
           break;
       }
@@ -114,7 +105,7 @@ function CalendarComponent({ activeRuangan, onSelectEvent }) {
     };
 
     const goToView = (view) => {
-      setActiveView(view); // Set tampilan aktif
+      setActiveView(view);
       toolbar.onView(view);
     };
 
@@ -161,7 +152,7 @@ function CalendarComponent({ activeRuangan, onSelectEvent }) {
         onSelectEvent={onSelectEvent}
         eventPropGetter={eventStyleGetter}
         components={{ toolbar: CustomToolbar }}
-        date={currentDate} // Mengatur tanggal aktif pada Calendar
+        date={currentDate}
       />
     </div>
   );

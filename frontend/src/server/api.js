@@ -92,19 +92,32 @@ export const deleteRoom = async (id) => {
 };
 
 
-export const updateRoom = async (id, roomData) => {
+export const updateRoom = async (roomId, roomData) => {
   try {
-    const response = await fetch(`${API_RO}${id}`, {
+    const response = await fetch(`${API_RO}${roomId}`, {
       method: "PUT",
       headers: {
+
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(roomData),
+      body: JSON.stringify({
+        name: roomData.name,
+        table: roomData.table,
+        air_conditioner: roomData.air_conditioner,
+        chair: roomData.chair,
+        screen: roomData.screen,
+        projector: roomData.projector,
+        audio: roomData.audio,
+      }),
     });
+
     if (!response.ok) {
       throw new Error("Failed to update room");
     }
+
     console.log("Room updated successfully");
+
+    // Mengembalikan data ruangan yang telah diperbarui dari respons server
     return await response.json();
   } catch (error) {
     console.error("Error updating room:", error);

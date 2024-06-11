@@ -1,169 +1,161 @@
 .status-component img {
-    width: 100%;
-    height: 800px;
-    top: 114px;
-    gap: 0px;
-    opacity: 40%;
-    color: #ffffff;
-  }
-  
-  .image-container {
-    position: relative;
-    display: flex;
-    align-items: center;
-  }
-  
-  .date-overlay {
-    position: absolute;
-    z-index: 1;
-    margin-top: 5%;
-    text-align: center;
-    top: 0;
-    left: 50%; /* Menempatkan teks di tengah horizontal */
-    transform: translateX(
-      -50%
-    ); /* Memposisikan teks di tengah gambar secara horizontal */
-    color: white; /* Warna teks */
-    font-size: 20px; /* Ukuran teks */
-    color: #002161;
-  }
-  
-  .room-name {
-    margin-bottom: 10px;
-    background-color: #002161;
-    width: 249px;
-    height: Hug (53px) px;
-    padding: 8px 24px 8px 24px;
-    gap: 10px;
-    border-radius: 40px;
-    opacity: 0px;
-    color: white;
-    font-family: roboto;
-    font-size: 25px;
-    text-align: center;
-    margin-bottom: 45px;
-  }
-  
-  .not-available h1 {
-    color: #002161;
-    font-size: 47px;
-    width: 550px;
-    margin-bottom: 25px;
-    text-align: center;
-  }
-  
-  .available h1 {
-    color: #002161;
-    font-size: 40px;
-    margin-top: 50px;
-  }
-  
-  .next-teks {
-    position: absolute;
-    top: 560px; /* Atur jarak dari atas */
-    left: 50%; /* Menempatkan di tengah horizontal */
-    transform: translateX(-50%); /* Menggeser sedikit ke kiri untuk menengahkan */
-    text-align: center; /* Memastikan tulisan berada di tengah */
-    background-color: #002161;
-    color: white;
-    border-radius: 18px;
-    font-size: 17px;
-    width: Hug (135px) px;
-    height: Hug (40px) px;
-    padding: 8px 16px 8px 16px;
-    opacity: 0px;
-  }
-  
-  .not-available p {
-    color: #002161;
-    font-size: 20px;
-    margin-bottom: 50px;
-  }
-  
-  .available {
-  }
-  
-  .waktu-pelaksanaan p {
-    background-color: #002161;
-    color: white;
-    width: 120px;
-    padding: 5px;
-    font-size: 17px;
-  }
-  
-  .waktu-pelaksanaan {
-    display: flex; /* Menggunakan flexbox */
-    justify-content: center; /* Memastikan konten berada di tengah */
-  }
-  
-  .live-components-container {
-    display: flex;
-    position: absolute;
-    top: 20%; /* Posisi di tengah vertikal */
-    left: 0; /* Mulai dari kiri */
-    right: 0; /* Hingga ke kanan */
-    justify-content: space-around;
-  }
-  
-  .live-status {
-    text-align: center;
-  }
-  
-  .live-component {
-    width: calc(20% - 10px); /* Dua komponen, kurangi margin */
-    padding: 10px;
-    border-radius: 5px;
-  }
-  
-  .live-status {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-  
-  .not-available {
-    text-align: center;
-  }
-  
-  .not-available,
-  .available {
-    display: flex; /* Menggunakan flexbox */
-    flex-direction: column; /* Menjadikan konten berada dalam satu kolom */
-    align-items: center; /* Memastikan konten berada di tengah secara horizontal */
-  }
-  
-  .live-component {
-    width: calc(20% - 10px); /* Dua komponen, kurangi margin */
-    padding: 10px;
-    border-radius: 5px;
-    display: flex; /* Menggunakan flexbox */
-    flex-direction: column; /* Menjadikan konten berada dalam satu kolom */
-    align-items: center; /* Memastikan konten berada di tengah secara horizontal */
-    align-self: flex-start; /* Mengatur posisi komponen di awal (atas) */
-  }
-  
-  .next-program-component {
-    display: flex;
-    justify-content: center; /* Menengahkan komponen secara horizontal */
-    position: absolute;
-    top: 80%;
-    left: 50%; /* Menempatkan di tengah horizontal */
-    transform: translateX(-50%); /* Menggeser sedikit ke kiri untuk menengahkan */
-    gap: 50px;
-  }
-  
-  .next-program {
-    background-color: #dadee1; /* Atur latar belakang */
-    padding: 10px;
-    text-align: center;
-    margin: 0 10px; /* Atur jarak antar komponen */
-    width: 500px;
-    color: #002161;
-  }
-  
-  .next-program h1 {
-    font-size: 27px;
-    margin-top: 10px;
-    margin-bottom: 5px;
-    font-weight: normal;
-  }
+  width: 100%;
+  height: 800px;
+  top: 114px;
+  gap: 0px;
+  opacity: 40%;
+  color: #ffffff;
+}
+
+.image-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.date-overlay {
+  position: absolute;
+  z-index: 1;
+  margin-top: 5%;
+  text-align: center;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  color: white;
+  font-size: 20px;
+  color: #002161;
+}
+
+.room-name {
+  margin-bottom: 10px;
+  background-color: #002161;
+  width: 249px;
+  height: Hug (53px) px;
+  padding: 8px 24px 8px 24px;
+  gap: 10px;
+  border-radius: 40px;
+  opacity: 0px;
+  color: white;
+  font-family: roboto;
+  font-size: 25px;
+  text-align: center;
+  margin-bottom: 45px;
+}
+
+.not-available h1 {
+  color: #002161;
+  font-size: 47px;
+  width: 550px;
+  margin-bottom: 25px;
+  text-align: center;
+}
+
+.available h1 {
+  color: #002161;
+  font-size: 40px;
+  margin-top: 50px;
+}
+
+.next-teks {
+  position: absolute;
+  top: 560px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: #002161;
+  font-size: 18px;
+  opacity: 0px;
+}
+
+.not-available p {
+  color: #002161;
+  font-size: 20px;
+  margin-bottom: 50px;
+}
+
+.available {
+}
+
+.waktu-pelaksanaan p {
+  background-color: #002161;
+  color: white;
+  width: 120px;
+  padding: 5px;
+  font-size: 17px;
+}
+
+.waktu-pelaksanaan {
+  display: flex;
+  justify-content: center;
+}
+
+.live-components-container {
+  display: flex;
+  position: absolute;
+  top: 20%;
+  left: 0;
+  right: 0;
+  justify-content: space-around;
+}
+
+.live-status {
+  text-align: center;
+}
+
+.live-component {
+  width: calc(20% - 10px);
+  padding: 10px;
+  border-radius: 5px;
+}
+
+.live-status {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.not-available {
+  text-align: center;
+}
+
+.not-available,
+.available {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.live-component {
+  width: calc(20% - 10px);
+  padding: 10px;
+  border-radius: 5px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  align-self: flex-start;
+}
+
+.next-program-component {
+  display: flex;
+  justify-content: center;
+  position: absolute;
+  top: 80%;
+  left: 50%;
+  transform: translateX(-50%);
+  gap: 50px;
+}
+
+.next-program {
+  background-color: #dadee1;
+  padding: 10px;
+  text-align: center;
+  margin: 0 10px;
+  width: 500px;
+  color: #002161;
+}
+
+.next-program h1 {
+  font-size: 27px;
+  margin-top: 10px;
+  margin-bottom: 5px;
+  font-weight: normal;
+}

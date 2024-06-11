@@ -5,59 +5,89 @@ import PanoramaWideAngleSelectIcon from "@mui/icons-material/PanoramaWideAngleSe
 import CastIcon from "@mui/icons-material/Cast";
 import TimelapseIcon from "@mui/icons-material/Timelapse";
 import VolumeUpIcon from "@mui/icons-material/VolumeUp";
-import EditIcon from '@mui/icons-material/Edit';
-import DeleteIcon from '@mui/icons-material/Delete';
-import UploadIcon from '@mui/icons-material/Upload';
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/Delete";
+import UploadIcon from "@mui/icons-material/Upload";
 import "./ruangan.css";
-import { fetchDataRo, updateRoom, deleteRoom } from "../../server/api"; // Adjust the import path accordingly
+import { fetchDataRo, updateRoom, deleteRoom } from "../../server/api";
 
-// Komponen popup untuk konfirmasi penghapusan
 const DeleteConfirmationPopup = ({ onCancel, onDelete }) => {
   return (
     <div className="delete-popup-container">
       <div className="delete-popup">
         <h4>Anda yakin untuk menghapus ruang ini?</h4>
         <div className="button-delete12">
-          <button className="for-delete" onClick={onDelete}>Hapus</button>
-          <button className="for-cancel" onClick={onCancel}>Batalkan</button>
+          <button className="for-delete" onClick={onDelete}>
+            Hapus
+          </button>
+          <button className="for-cancel" onClick={onCancel}>
+            Batalkan
+          </button>
         </div>
       </div>
     </div>
   );
 };
 
-// Komponen popup untuk mengedit ruangan
 const EditPopup = ({ roomData, onClose, onSave }) => {
-  
   const [editedRoom, setEditedRoom] = useState(roomData);
+  const [selectedImage, setSelectedImage] = useState(null);
 
   const handleNameChange = (e) => {
     const { value } = e.target;
-    setEditedRoom(prevState => ({
+    setEditedRoom((prevState) => ({
       ...prevState,
-      roomName: value
+      roomName: value,
     }));
   };
 
   const handleDetailChange = (e, index, column) => {
     const { value } = e.target;
-    setEditedRoom(prevState => {
+    setEditedRoom((prevState) => {
       const updatedDetails = { ...prevState.details };
       updatedDetails[column][index].count = parseInt(value, 10);
       return {
         ...prevState,
-        details: updatedDetails
+        details: updatedDetails,
       };
     });
   };
 
-  const handleSave = () => {
-    onSave(editedRoom);
-    onClose();
+  const handleUploadClick = () => {
+    document.getElementById("upload-input").click();
   };
 
-  const getFileNameFromURL = (url) => {
-    return url.split('/').pop();
+  const handleImageChange = (event) => {
+    const selectedFile = event.target.files[0];
+    setSelectedImage(selectedFile);
+
+    setEditedRoom((prevState) => ({
+      ...prevState,
+      imageSource: URL.createObjectURL(selectedFile),
+    }));
+  };
+
+  const handleSave = async () => {
+    let imageUrl = editedRoom.imageSource;
+ 
+    if (selectedImage) {
+      const formData = new FormData();
+      formData.append("image", selectedImage);
+      try {
+        const response = await updateRoom(formData);
+        imageUrl = response.imageUrl;
+      } catch (error) {
+        console.error("Error uploading image:", error);
+      }
+    }
+
+    const updatedRoom = {
+      ...editedRoom,
+      imageSource: imageUrl,
+    };
+  
+    onSave(updatedRoom);
+    onClose();
   };
 
   return (
@@ -67,14 +97,26 @@ const EditPopup = ({ roomData, onClose, onSave }) => {
         <form>
           <div className="form-nama-ruangan">
             <label>Nama</label>
-            <input type="text" name="roomName" value={editedRoom.roomName} onChange={handleNameChange} />
+            <input
+              type="text"
+              name="roomName"
+              value={editedRoom.roomName}
+              onChange={handleNameChange}
+            />
           </div>
           <div className="details-container">
             <div className="detail-column">
               {editedRoom.details.leftDetails.map((detail, index) => (
                 <div key={index} className="detail-item">
                   <label>{detail.title}</label>
-                  <input type="number" name={detail.title} value={detail.count} onChange={(e) => handleDetailChange(e, index, 'leftDetails')} />
+                  <input
+                    type="number"
+                    name={detail.title}
+                    value={detail.count}
+                    onChange={(e) =>
+                      handleDetailChange(e, index, "leftDetails")
+                    }
+                  />
                 </div>
               ))}
             </div>
@@ -82,7 +124,14 @@ const EditPopup = ({ roomData, onClose, onSave }) => {
               {editedRoom.details.rightDetails.map((detail, index) => (
                 <div key={index} className="detail-item">
                   <label>{detail.title}</label>
-                  <input type="number" name={detail.title} value={detail.count} onChange={(e) => handleDetailChange(e, index, 'rightDetails')} />
+                  <input
+                    type="number"
+                    name={detail.title}
+                    value={detail.count}
+                    onChange={(e) =>
+                      handleDetailChange(e, index, "rightDetails")
+                    }
+                  />
                 </div>
               ))}
             </div>
@@ -90,34 +139,67 @@ const EditPopup = ({ roomData, onClose, onSave }) => {
           <div className="gambar-ruangan">
             <label htmlFor="gambar">Gambar</label>
             <div className="upload-gambar">
-              <input type="text" id="gambar" name="gambar" value={getFileNameFromURL(editedRoom.imageSource)} readOnly />
-              <button>
+              <input
+                type="text"
+                id="gambar"
+                name="gambar"
+                value={editedRoom.imageSource.split("/").pop()}
+                readOnly
+              />
+              <input
+                type="file"
+                id="upload-input"
+                style={{ display: "none" }}
+                onChange={handleImageChange}
+              />
+              <button type="button" onClick={handleUploadClick}>
                 Upload <UploadIcon className="upload-icon" />
               </button>
             </div>
           </div>
-          <button className="button-container" type="button" onClick={handleSave}>Simpan</button>
+          <button
+            className="button-container"
+            type="button"
+            onClick={handleSave}
+          >
+            Simpan
+          </button>
         </form>
       </div>
     </div>
   );
 };
 
-
-const RoomDetail = ({ roomName, leftButton1Title, leftButton2Title, leftDetails, rightDetails, imageSource, roomId, updateRooms }) => {
+const RoomDetail = ({
+  roomName,
+  leftButton1Title,
+  leftButton2Title,
+  leftDetails,
+  rightDetails,
+  imageSource,
+  roomId,
+  updateRooms,
+  removeRoom,
+}) => {
   const [isEditPopupOpen, setIsEditPopupOpen] = useState(false);
-  const [isDeleteConfirmationOpen, setIsDeleteConfirmationOpen] = useState(false);
-  const [currentRoomData, setCurrentRoomData] = useState({ roomName: '', details: { leftDetails: [], rightDetails: [] }, imageSource: '' });
+  const [isDeleteConfirmationOpen, setIsDeleteConfirmationOpen] =
+    useState(false);
+  const [currentRoomData, setCurrentRoomData] = useState({
+    roomName: "",
+    details: { leftDetails: [], rightDetails: [] },
+    imageSource: "",
+  });
 
   const handleEditButtonClick = () => {
     setCurrentRoomData({
       roomName,
       details: { leftDetails, rightDetails },
       imageSource,
-      roomId
+      roomId,
     });
     setIsEditPopupOpen(true);
   };
+  
 
   const handleDeleteClick = () => {
     setIsDeleteConfirmationOpen(true);
@@ -125,19 +207,17 @@ const RoomDetail = ({ roomName, leftButton1Title, leftButton2Title, leftDetails,
 
   const handleConfirmDelete = async () => {
     try {
-      // Panggil fungsi untuk menghapus ruangan dari server
-      const response = await deleteRoom(roomId); // Anda perlu mengimplementasikan fungsi deleteRoom sesuai dengan server Anda
+      const response = await deleteRoom(roomId);
       if (response.success) {
         console.log("Ruangan berhasil dihapus.");
-        // Panggil fungsi untuk memperbarui daftar ruangan dengan data terbaru dari server
-        updateRooms(response.updatedRooms);
+        removeRoom(roomId);
       } else {
         console.error("Gagal menghapus ruangan.");
       }
     } catch (error) {
       console.error("Error:", error);
     } finally {
-      setIsDeleteConfirmationOpen(false); // Tutup popup konfirmasi penghapusan setelah selesai
+      setIsDeleteConfirmationOpen(false);
     }
   };
 
@@ -153,17 +233,29 @@ const RoomDetail = ({ roomName, leftButton1Title, leftButton2Title, leftDetails,
     try {
       const response = await updateRoom(editedRoom.roomId, {
         name: editedRoom.roomName,
-        table: editedRoom.details.leftDetails.find(detail => detail.title === "Meja").count,
-        air_conditioner: editedRoom.details.leftDetails.find(detail => detail.title === "AC").count,
-        chair: editedRoom.details.leftDetails.find(detail => detail.title === "Kursi").count,
-        screen: editedRoom.details.rightDetails.find(detail => detail.title === "Layar").count,
-        projector: editedRoom.details.rightDetails.find(detail => detail.title === "Proyektor").count,
-        audio: editedRoom.details.rightDetails.find(detail => detail.title === "Audio").count,
-        image: editedRoom.imageSource.split('/').pop() // assuming the image is unchanged
+        table: editedRoom.details.leftDetails.find(
+          (detail) => detail.title === "Meja"
+        ).count,
+        air_conditioner: editedRoom.details.leftDetails.find(
+          (detail) => detail.title === "AC"
+        ).count,
+        chair: editedRoom.details.leftDetails.find(
+          (detail) => detail.title === "Kursi"
+        ).count,
+        screen: editedRoom.details.rightDetails.find(
+          (detail) => detail.title === "Layar"
+        ).count,
+        projector: editedRoom.details.rightDetails.find(
+          (detail) => detail.title === "Proyektor"
+        ).count,
+        audio: editedRoom.details.rightDetails.find(
+          (detail) => detail.title === "Audio"
+        ).count,
+        image: editedRoom.imageSource.split("/").pop(),
       });
       if (response) {
         console.log("Perubahan disimpan di server.");
-        updateRooms(response); // Pass the updated room data from server response
+        updateRooms(response);
       } else {
         console.error("Gagal menyimpan perubahan di server.");
       }
@@ -171,6 +263,7 @@ const RoomDetail = ({ roomName, leftButton1Title, leftButton2Title, leftDetails,
       console.error("Error:", error);
     }
   };
+  
 
   return (
     <div className="room">
@@ -183,7 +276,9 @@ const RoomDetail = ({ roomName, leftButton1Title, leftButton2Title, leftDetails,
               {leftDetails.map((detail, index) => (
                 <tr key={index}>
                   <th>{detail.icon}</th>
-                  <td>{detail.title}: {detail.count}</td>
+                  <td>
+                    {detail.title}: {detail.count}
+                  </td>
                 </tr>
               ))}
             </tbody>
@@ -193,36 +288,49 @@ const RoomDetail = ({ roomName, leftButton1Title, leftButton2Title, leftDetails,
               {rightDetails.map((detail, index) => (
                 <tr key={index}>
                   <th>{detail.icon}</th>
-                  <td>{detail.title}: {detail.count}</td>
+                  <td>
+                    {detail.title}: {detail.count}
+                  </td>
                 </tr>
               ))}
             </tbody>
           </table>
           <div className="left-buttons">
-            <div className="button-containerr">
+          <div className="button-containerr">
               <button className="icon-edit" onClick={handleEditButtonClick}>
-                {leftButton1Title} <EditIcon/>
+                {leftButton1Title} <EditIcon />
               </button>
             </div>
             <div className="button-containerr">
               <button className="icon-delete" onClick={handleDeleteClick}>
-                {leftButton2Title} <DeleteIcon/>
+                {leftButton2Title} <DeleteIcon />
               </button>
             </div>
           </div>
         </div>
       </div>
-      {isEditPopupOpen && <EditPopup roomData={currentRoomData} onClose={handleCloseEditPopup} onSave={handleSaveEditedRoom} />}
-      {isDeleteConfirmationOpen && <DeleteConfirmationPopup onCancel={handleCloseDeleteConfirmation} onDelete={handleConfirmDelete} />}
+      {isEditPopupOpen && (
+        <EditPopup
+          roomData={currentRoomData}
+          onClose={handleCloseEditPopup}
+          onSave={handleSaveEditedRoom}
+        />
+      )}
+      {isDeleteConfirmationOpen && (
+        <DeleteConfirmationPopup
+          onCancel={handleCloseDeleteConfirmation}
+          onDelete={handleConfirmDelete}
+        />
+      )}
     </div>
   );
 };
-
 
 const Ruangan = () => {
   const [rooms, setRooms] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [refreshTrigger, setRefreshTrigger] = useState(false);
 
   useEffect(() => {
     const getRooms = async () => {
@@ -237,7 +345,7 @@ const Ruangan = () => {
     };
 
     getRooms();
-  }, []);
+  }, [refreshTrigger]);
 
   const updateRooms = (updatedRoom) => {
     setRooms((prevRooms) =>
@@ -245,6 +353,11 @@ const Ruangan = () => {
         room._id === updatedRoom._id ? updatedRoom : room
       )
     );
+    setRefreshTrigger((prevState) => !prevState);
+  };
+
+  const removeRoom = (roomId) => {
+    setRooms((prevRooms) => prevRooms.filter((room) => room._id !== roomId));
   };
 
   if (loading) {
@@ -263,20 +376,37 @@ const Ruangan = () => {
             key={room._id}
             roomId={room._id}
             roomName={room.name}
-            imageSource={`http://localhost:3001/uploads/images/${room.image}`} // Adjust the base URL accordingly
+            imageSource={`http://localhost:3001/uploads/images/${room.image}`}
             leftDetails={[
-              { icon: <PanoramaWideAngleSelectIcon />, title: "Meja", count: room.table },
-              { icon: <AcUnitIcon />, title: "AC", count: room.air_conditioner },
-              { icon: <AirlineSeatReclineNormalIcon />, title: "Kursi", count: room.chair }
+              {
+                icon: <PanoramaWideAngleSelectIcon />,
+                title: "Meja",
+                count: room.table,
+              },
+              {
+                icon: <AcUnitIcon />,
+                title: "AC",
+                count: room.air_conditioner,
+              },
+              {
+                icon: <AirlineSeatReclineNormalIcon />,
+                title: "Kursi",
+                count: room.chair,
+              },
             ]}
             rightDetails={[
               { icon: <CastIcon />, title: "Layar", count: room.screen },
-              { icon: <TimelapseIcon />, title: "Proyektor", count: room.projector },
-              { icon: <VolumeUpIcon />, title: "Audio", count: room.audio }
+              {
+                icon: <TimelapseIcon />,
+                title: "Proyektor",
+                count: room.projector,
+              },
+              { icon: <VolumeUpIcon />, title: "Audio", count: room.audio },
             ]}
             leftButton1Title="Edit"
             leftButton2Title="Delete"
-            updateRooms={updateRooms} // Pass the updateRooms function to RoomDetail
+            updateRooms={updateRooms}
+            removeRoom={removeRoom}
           />
         ))}
       </div>

@@ -21,15 +21,6 @@ export const Popup = ({ onClose, newBookingId }) => {
         <span className="text1-wrapper">
           Pengajuan Peminjaman Ruang Rapat Anda Dikirimkan
         </span>
-
-        <div>
-          <span className="bookingTitle">Booking ID: </span>
-        <div className="text3-wrapper">
-        {newBookingId}
-          <button className="copy-button" onClick={copyToClipboard}>
-            {copied ? <Check size={16} /> : <Clipboard size={16} />}
-          </button>
-        </div></div>
         <p className="text2-wrapper">
           Pantau jadwal penggunaan ruangan untuk mengecek status peminjaman
         </p>

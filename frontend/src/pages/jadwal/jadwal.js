@@ -19,16 +19,16 @@ export default function Jadwal() {
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [isSuccessPopupOpen, setIsSuccessPopupOpen] = useState(false);
   const [newBookingId, setNewBookingId] = useState(null);
-
   const calendarRef = useRef(null);
+  const pollingRef = useRef(null); // Ref untuk menyimpan interval polling
 
   useEffect(() => {
     const fetchRooms = async () => {
       try {
         const rooms = await fetchDataRo();
         setRuanganList(rooms);
-
-        const defaultRoom = rooms.find(room => room.name === "Ruang Control");
+        // Mengambil ruangan pertama dari array rooms
+        const defaultRoom = rooms[0];
         if (defaultRoom) {
           setActiveRuangan(defaultRoom._id);
         }
@@ -36,9 +36,33 @@ export default function Jadwal() {
         console.error("Error fetching rooms:", error);
       }
     };
-
     fetchRooms();
   }, []);
+  
+
+  useEffect(() => {
+    startPolling();
+    return () => stopPolling(); // Bersihkan interval saat komponen akan di-unmount
+  }, [activeRuangan]);
+
+  const startPolling = () => {
+    stopPolling(); // Pastikan polling sebelumnya berhenti
+    pollingRef.current = setInterval(() => {
+      fetchData()
+        .then(newData => {
+          setData(newData);
+        })
+        .catch(error => {
+          console.error("Error fetching data:", error);
+        });
+    }, 5000); // Lakukan polling setiap 5 detik
+  };
+
+  const stopPolling = () => {
+    if (pollingRef.current) {
+      clearInterval(pollingRef.current);
+    }
+  };
 
   const openPopup = () => {
     setIsPopupOpen(true);
@@ -62,18 +86,6 @@ export default function Jadwal() {
 
   const handleClosePopup = () => {
     setSelectedEvent(null);
-  };
-
-  const handleCreateData = async () => {
-    try {
-      const newData = await fetchData();
-      setData(newData);
-      const newBookingId = newData[newData.length - 1].id;
-      setNewBookingId(newBookingId);
-      setIsSuccessPopupOpen(true);
-    } catch (error) {
-      console.error("Error creating data:", error);
-    }
   };
 
   const closeSuccessPopup = () => {
@@ -102,26 +114,23 @@ export default function Jadwal() {
                 ))}
               </Select>
             </div>
-            <button className="button-jadwal" onClick={openPopup}>Tambah Jadwal</button>
           </div>
         </div>
 
         <div className="jadwal-middle">
-          <CalendarComponent ref={calendarRef} activeRuangan={activeRuangan} onSelectEvent={handleSelectEvent} />
+          <CalendarComponent
+            ref={calendarRef}
+            activeRuangan={activeRuangan}
+            data={data}
+            onSelectEvent={handleSelectEvent}
+          />
         </div>
         <div className="jadwal-bottom">
           <span className="keterangan setuju">Disetujui</span>
-          <span className="keterangan proses">Diproses</span>
+          <span className="keterangan reschedule">Rescheduled</span>
           <span className="keterangan batal">Dibatalkan</span>
         </div>
 
-        {isPopupOpen && (
-          <div className="popup-container">
-            <div className="popup">
-              <FormPengajuan onSubmit={handleCreateData} onClose={closePopup} />
-            </div>
-          </div>
-        )}
         {isSuccessPopupOpen && (
           <div className="popup-container">
             <div className="popup">

@@ -2,61 +2,61 @@ import React, { useState, useEffect } from "react";
 import { Input, message } from "antd";
 import moment from "moment";
 import "./jadwal-detail.css";
-import { deleteData, fetchDataIns } from "../../../server/api";
+import {fetchDataIns, fetchDataRo} from "../../../server/api";
 
 const EventDetailPopup = ({ selectedEvent, handleClosePopup }) => {
-    const [bookingId, setBookingId] = useState("");
-    const [rooms, setRooms] = useState([]);
+
+    const [Ins, setIns] = useState([]);
     const [instanceName, setInstanceName] = useState("");
+
+    const [room, setRoom] = useState([]);
+    const [roomName, setRoomName] = useState("");
 
     useEffect(() => {
         // Fetch room data on component mount
-        const getRooms = async () => {
+        const getIns = async () => {
             try {
                 const data = await fetchDataIns();
-                setRooms(data);
+                setIns(data);
             } catch (error) {
                 console.error("Error fetching room data:", error);
             }
         };
 
-        getRooms();
+        getIns();
+    }, []);
+
+    useEffect(() => {
+        // Fetch room data on component mount
+        const getRoom = async () => {
+            try {
+                const data = await fetchDataRo();
+                setRoom(data);
+            } catch (error) {
+                console.error("Error fetching room data:", error);
+            }
+        };
+
+        getRoom();
     }, []);
 
     useEffect(() => {
         // Find and set the instance name based on selectedEvent.instansi
-        if (rooms.length > 0) {
-            const matchedRoom = rooms.find(room => room._id === selectedEvent.instansi);
-            setInstanceName(matchedRoom ? matchedRoom.name : "Unknown");
+        if (Ins.length > 0) {
+            const matchedIns = Ins.find(Ins => Ins._id === selectedEvent.instansi);
+            setInstanceName(matchedIns ? matchedIns.name : "Unknown");
         }
-    }, [rooms, selectedEvent.instansi]);
+    }, [Ins, selectedEvent.instansi]);
 
-    const handleDelete = async () => {
-        const trimmedBookingId = bookingId.trim();
-
-        console.log("Input Booking ID:", trimmedBookingId);
-        console.log("Selected Event ID:", selectedEvent.id);
-
-        if (!trimmedBookingId) {
-            message.error("Booking ID harus diisi");
-            return;
+    useEffect(() => {
+        // Find and set the instance name based on selectedEvent.instansi
+        if (room.length > 0) {
+            const matchedRoom = room.find(room => room._id === selectedEvent.ruangan);
+            setRoomName(matchedRoom ? matchedRoom.name : "Unknown");
         }
+    }, [room, selectedEvent.ruangan]);
 
-        if (trimmedBookingId !== selectedEvent.id) {
-            message.error("Booking ID tidak cocok");
-            return;
-        }
-
-        try {
-            await deleteData(selectedEvent.idItem);
-            message.success("Jadwal berhasil dibatalkan");
-            handleClosePopup();
-        } catch (error) {
-            console.log("Selected Event ID Item:", selectedEvent.idItem);
-            message.error("Gagal membatalkan jadwal");
-            console.error("Error deleting data:", error);
-        }
-    };
+   
 
     return (
         <div className="popup-container">
@@ -68,6 +68,11 @@ const EventDetailPopup = ({ selectedEvent, handleClosePopup }) => {
 
                 <table className="detail-event-table">
                     <tbody>
+                    <tr>
+                            <td>Ruangan</td>
+                            <td>:</td>
+                            <td>{roomName}</td>
+                        </tr>
                         <tr>
                             <td>Instansi</td>
                             <td>:</td>
@@ -85,16 +90,6 @@ const EventDetailPopup = ({ selectedEvent, handleClosePopup }) => {
                         </tr>
                     </tbody>
                 </table>
-                <div className="jadwal-detail-bottom">
-                    <p>Ingin membatalkan jadwal?</p>
-                    <Input
-                        className="input-batal-jadwal-detail"
-                        placeholder="Masukkan booking ID Anda"
-                        value={bookingId}
-                        onChange={(e) => setBookingId(e.target.value)}
-                    />
-                </div>
-                <button className="detail-event-button" onClick={handleDelete}>Batalkan Jadwal</button>
             </div>
         </div>
     );

@@ -141,11 +141,15 @@ const TableRow = ({ el, handleStatusChange, handleDelete, onSelect, findInstance
   const { _id, date, start_time, end_time, room, activity, instance, status, letter } = el;
   const [selectedStatus, setSelectedStatus] = useState(status);
 
-  const statusOptions = [
-    { value: 'Diproses', label: 'Diproses' },
-    { value: 'Disetujui', label: 'Disetujui' },
-    { value: 'Dibatalkan', label: 'Dibatalkan' },
-  ];
+  const statusOptions = selectedStatus === 'Rescheduled'
+    ? [
+        { value: 'Rescheduled', label: 'Rescheduled' },
+        { value: 'Dibatalkan', label: 'Dibatalkan' },
+      ]
+    : [
+        { value: 'Disetujui', label: 'Disetujui' },
+        { value: 'Dibatalkan', label: 'Dibatalkan' },
+      ];
 
   const handleStatusSelect = async (value) => {
     setSelectedStatus(value);
@@ -160,6 +164,12 @@ const TableRow = ({ el, handleStatusChange, handleDelete, onSelect, findInstance
 
   const jamFormatted = `${start_time} - ${end_time}`;
 
+  useEffect(() => {
+    if (status === 'Rescheduled') {
+      setSelectedStatus('Rescheduled');
+    }
+  }, [status]);
+
   return (
     <tr className="tableRowItems">
       <td className="tableCell">{formattedDate}</td>
@@ -171,8 +181,9 @@ const TableRow = ({ el, handleStatusChange, handleDelete, onSelect, findInstance
         <Select
           style={{ width: "90%" }}
           options={statusOptions}
-          value={statusOptions.find(option => option.value === selectedStatus)?.value}
+          value={selectedStatus}
           onChange={handleStatusSelect}
+          disabled={selectedStatus === 'Dibatalkan'}
         />
       </td>
       <td className="tableCell">

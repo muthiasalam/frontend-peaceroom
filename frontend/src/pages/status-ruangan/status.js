@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import Header from "../../components/header/header";
 import Background from "../../assets/newbackground.jpeg";
 import "./status.css";
 import { fetchData, fetchDataRo, fetchDataIns } from "../../server/api"; // Sesuaikan path import sesuai struktur proyek Anda
@@ -14,7 +13,11 @@ export default function Status() {
   useEffect(() => {
     const fetchDataAndRoomsAndInstances = async () => {
       try {
-        const [meetingsData, roomsData, instancesData] = await Promise.all([fetchData(), fetchDataRo(), fetchDataIns()]);
+        const [meetingsData, roomsData, instancesData] = await Promise.all([
+          fetchData(),
+          fetchDataRo(),
+          fetchDataIns(),
+        ]);
         setMeetings(meetingsData);
         setRooms(roomsData);
         setInstances(instancesData);
@@ -25,7 +28,11 @@ export default function Status() {
       }
     };
 
+    const interval = setInterval(fetchDataAndRoomsAndInstances, 60000);
+
     fetchDataAndRoomsAndInstances();
+
+    return () => clearInterval(interval);
   }, []);
 
   const currentDate = new Date();
@@ -75,21 +82,50 @@ export default function Status() {
   // Filter for meetings that are currently ongoing and approved
   const ongoingMeetings = meetings.filter((meeting) => {
     const meetingDate = new Date(meeting.date);
-    const meetingStart = combineDateTime(meetingDate, meeting.start_time).getTime();
+    const meetingStart = combineDateTime(
+      meetingDate,
+      meeting.start_time
+    ).getTime();
     const meetingEnd = combineDateTime(meetingDate, meeting.end_time).getTime();
-    return currentTime >= meetingStart && currentTime <= meetingEnd && meeting.status === "Disetujui";
+    return (
+      currentTime >= meetingStart &&
+      currentTime <= meetingEnd &&
+      (meeting.status === "Disetujui" || meeting.status === "Direschedule")
+    );
   });
 
   // Filter for meetings that are upcoming today and approved
   const upcomingMeetings = meetings.filter((meeting) => {
     const meetingDate = new Date(meeting.date);
-    const meetingStart = combineDateTime(meetingDate, meeting.start_time).getTime();
-    return meetingDate.toDateString() === currentDate.toDateString() && meetingStart > currentTime && meeting.status === "Disetujui";
+    const meetingStart = combineDateTime(
+      meetingDate,
+      meeting.start_time
+    ).getTime();
+    return (
+      meetingDate.toDateString() === currentDate.toDateString() &&
+      meetingStart > currentTime &&
+      (meeting.status === "Disetujui" || meeting.status === "Direschedule")
+    );
   });
+
+  const getInstanceAndRoomNameById = (instanceId) => {
+    const instance = instances.find((instance) => instance._id === instanceId);
+    if (instance) {
+      const room = rooms.find((room) => room._id === instance.room);
+      return {
+        instanceName: instance.name,
+        roomName: room ? room.name : "Unknown Room"
+      };
+    } else {
+      return {
+        instanceName: "Unknown Instance",
+        roomName: "Unknown Room"
+      };
+    }
+  };
 
   return (
     <>
-      <Header />
       <div className="status-component">
         <div className="image-container">
           <div className="date-overlay">{formattedDate}</div>
@@ -103,7 +139,9 @@ export default function Status() {
               ongoingMeetings.map((meeting) => (
                 <div key={meeting._id} className="live-component">
                   <div className="live-status">
-                    <div className="room-name">{getRoomNameById(meeting.room)}</div>
+                    <div className="room-name">
+                      {getRoomNameById(meeting.room)}
+                    </div>
                     <div className="not-available">
                       <h1>{meeting.name}</h1>
                       <p>{getInstanceNameById(meeting.instance)}</p>
@@ -123,13 +161,19 @@ export default function Status() {
           </div>
           <div className="next-program-component">
             {upcomingMeetings.length > 0 ? (
-              upcomingMeetings.map((nextMeeting) => (
-                <div key={nextMeeting._id} className="next-program">
-                  <p>{`${nextMeeting.start_time} - ${nextMeeting.end_time}`}</p>
-                  <h1>{nextMeeting.name}</h1>
-                  <p>{getInstanceNameById(nextMeeting.instance)}</p>
-                </div>
-              ))
+              upcomingMeetings.map((nextMeeting) => {
+                const { instanceName, roomName } = getInstanceAndRoomNameById(
+                  nextMeeting.instance
+                );
+                return (
+                  <div key={nextMeeting._id} className="next-program">
+                    <p>{`${nextMeeting.start_time} - ${nextMeeting.end_time}`}</p>
+                    <h1>{nextMeeting.name}</h1>
+                    <p>Instance: {instanceName}</p>
+                    <p>Room: {roomName}</p>
+                  </div>
+                );
+              })
             ) : (
               <p>No upcoming meetings today</p>
             )}
